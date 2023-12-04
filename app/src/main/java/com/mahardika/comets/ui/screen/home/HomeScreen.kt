@@ -1,9 +1,8 @@
 package com.mahardika.comets.ui.screen.home
 
-import android.widget.Space
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -31,17 +30,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import getBottomLineShape
+import com.mahardika.comets.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,30 +53,30 @@ fun HomeScreen(
             .verticalScroll(scrollState)
     ) {
         Surface(
-            modifier = Modifier.border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
-                shape = getBottomLineShape(1.dp)
-            )
+            shadowElevation = 4.dp
         ) {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Text(
-                            text = "Hello, Eren",
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+                    Text(
+                        text = "Comets",
+                        fontWeight = FontWeight.SemiBold
+                    )
+                },
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(R.drawable.logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                },
+                actions = {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                modifier = Modifier.padding(horizontal = 12.dp)
             )
         }
         Column(
@@ -92,7 +91,7 @@ fun HomeScreen(
             Text(
                 text = "Statistic",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -114,16 +113,15 @@ fun HomeScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
-                        ){
+                        ) {
                             Column(
                                 modifier = Modifier.weight(1f)
-                            ){
+                            ) {
                                 Text(
                                     text = "70",
                                     fontSize = 48.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.Yellow,
-                                    lineHeight = 0.sp
+                                    color = Color.Yellow
                                 )
                                 Text(
                                     text = "of 100",
@@ -155,6 +153,12 @@ fun HomeScreen(
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(
+                text = "5-day mood history",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold
+            )
         }
     }
 }

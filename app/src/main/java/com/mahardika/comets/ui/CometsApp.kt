@@ -3,7 +3,6 @@ package com.mahardika.comets.ui
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -50,7 +49,6 @@ import com.mahardika.comets.ui.screen.home.HomeScreen
 import com.mahardika.comets.ui.screen.journal.JournalScreen
 import com.mahardika.comets.ui.screen.profile.ProfileScreen
 import com.mahardika.comets.ui.theme.CometsTheme
-import getBottomLineShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,11 +63,6 @@ fun CometsApp(
         topBar = {
             if (currentRoute != Screen.Home.route) {
                 Surface(
-                    modifier = Modifier.border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = getBottomLineShape(1.dp)
-                    ),
                     shadowElevation = 4.dp
                 ) {
                     CenterAlignedTopAppBar(
@@ -78,7 +71,7 @@ fun CometsApp(
                                 text = currentRoute.toString().replaceFirstChar {
                                     it.titlecase()
                                 },
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.SemiBold
                             )
                         }
                     )
