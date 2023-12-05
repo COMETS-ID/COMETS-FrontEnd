@@ -12,11 +12,16 @@ import org.junit.runner.RunWith
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class ExampleInstrumentedTest
+{
     @Test
-    fun useAppContext() {
+    fun useAppContext()
+    {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.mahardika.comets", appContext.packageName)
+        assertEquals(
+            "com.mahardika.comets",
+            appContext.packageName
+        )
     }
 }

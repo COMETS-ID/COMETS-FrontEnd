@@ -1,162 +1,188 @@
 package com.mahardika.comets.ui.screen.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mahardika.comets.ui.commons.CarouselItemContent
 import com.mahardika.comets.ui.screen.home.components.ArticleItem
-import com.mahardika.comets.ui.screen.home.components.CarouselItem
 import com.mahardika.comets.ui.screen.home.components.MoodItem
-import com.mahardika.comets.ui.screen.home.components.StatisticItem
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen()
+{
     val scrollState = rememberScrollState()
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
-        modifier = Modifier.verticalScroll(scrollState)
+        modifier = Modifier
+            .verticalScroll(scrollState)
+            .background(color = MaterialTheme.colorScheme.primary)
     ) {
-        Spacer(modifier = Modifier)
-        CarouselSection()
-        Column(
-            verticalArrangement = Arrangement.spacedBy(32.dp),
-            modifier = Modifier.padding(horizontal = 16.dp)
+        HeaderSection()
+        Surface(
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.clip(
+                shape = RoundedCornerShape(
+                    32.dp,
+                    32.dp,
+                    0.dp,
+                    0.dp
+                )
+            )
         ) {
-            StatisticSection()
-            MoodSection()
-            ArticleSection()
+            Column(
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
+                Spacer(modifier = Modifier)
+                MoodSection()
+                ArticleSection()
+            }
         }
     }
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CarouselSection() {
-    val carouselItemContent = listOf(
-        CarouselItemContent(title = "Title 1", description = "Description 1"),
-        CarouselItemContent(title = "Title 2", description = "Description 2"),
-        CarouselItemContent(title = "Title 3", description = "Description 3")
-    )
-    val pagerState = rememberPagerState(
-        pageCount = {
-            3
-        }
-    )
-    HorizontalPager(
-        state = pagerState,
-        pageSpacing = 16.dp,
-        contentPadding = PaddingValues(horizontal = 24.dp),
-        modifier = Modifier.height(200.dp),
-    ) {
-        carouselItemContent.getOrNull(it)?.let { item ->
-            CarouselItem(item = item)
-        }
-    }
-}
-
-@Composable
-fun StatisticSection() {
+fun HeaderSection()
+{
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        Text(
-            text = "Statistic",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.height(IntrinsicSize.Max)
-        ) {
-            StatisticItem(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
+        Column {
+            Text(
+                text = "Good Morning,",
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = "Mental Health Score",
-                        fontSize = 12.sp
-                    )
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "70",
-                                fontSize = 48.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Yellow,
-                                style = TextStyle(
-                                    platformStyle = PlatformTextStyle(
-                                        includeFontPadding = false
-                                    )
-                                )
-                            )
-                            Text(
-                                text = "/100"
-                            )
-                        }
-                        Text(
-                            text = "Okay",
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
-            }
-            StatisticItem(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            ) {
-                Column {
-                    Text(
-                        text = "Today's Mood",
-                        fontSize = 12.sp
-                    )
-                }
+                Text(
+                    text = "Eren Yeager",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
+        StatisticSection()
+    }
+}
+
+@Composable
+fun StatisticSection()
+{
+    Column() {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Statistic",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(color = MaterialTheme.colorScheme.primaryContainer)
+                .padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Mental Health Score",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    text = "70",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Today's Mood",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    text = "Neutral",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Based on the assessment you have done before",
+            textAlign = TextAlign.Center,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Light,
+            fontStyle = FontStyle.Italic,
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
 @Composable
 fun MoodSection(
-) {
+)
+{
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -200,7 +226,8 @@ fun MoodSection(
 }
 
 @Composable
-fun ArticleSection() {
+fun ArticleSection()
+{
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {

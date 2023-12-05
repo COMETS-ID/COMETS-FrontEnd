@@ -1,6 +1,7 @@
 package com.mahardika.comets.ui.navigation
 
-sealed class Screen(val route: String) {
+sealed class Screen(val route: String)
+{
     object Home : Screen("home")
     object Journal : Screen("journal")
     object Camera : Screen("camera")

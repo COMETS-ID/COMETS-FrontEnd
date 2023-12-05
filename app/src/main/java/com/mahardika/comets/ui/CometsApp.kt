@@ -41,7 +41,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mahardika.comets.R
-import com.mahardika.comets.ui.components.TopBar
 import com.mahardika.comets.ui.navigation.NavigationItem
 import com.mahardika.comets.ui.navigation.Screen
 import com.mahardika.comets.ui.screen.camera.CameraScreen
@@ -56,13 +55,15 @@ import com.mahardika.comets.ui.theme.CometsTheme
 fun CometsApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-) {
+)
+{
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         topBar = {
-            if (currentRoute != Screen.Home.route) {
+            if (currentRoute != Screen.Home.route)
+            {
                 Surface(
                     shadowElevation = 4.dp
                 ) {
@@ -77,8 +78,9 @@ fun CometsApp(
                         }
                     )
                 }
-            } else {
-                TopBar()
+            } else
+            {
+//                TopBar()
             }
         },
         bottomBar = {
@@ -128,7 +130,8 @@ fun CometsApp(
 
 @Preview
 @Composable
-fun CometsAppPreview() {
+fun CometsAppPreview()
+{
     CometsTheme {
         CometsApp()
     }
@@ -139,7 +142,8 @@ fun BottomBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     currentRoute: String?
-) {
+)
+{
     Box(
         contentAlignment = Alignment.BottomCenter,
         modifier = modifier.fillMaxWidth()
@@ -148,7 +152,14 @@ fun BottomBar(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = modifier
-                .clip(RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp))
+                .clip(
+                    RoundedCornerShape(
+                        16.dp,
+                        16.dp,
+                        0.dp,
+                        0.dp
+                    )
+                )
         ) {
             val navigationItems = listOf(
                 NavigationItem(
@@ -184,7 +195,8 @@ fun BottomBar(
             )
 
             navigationItems.map { item ->
-                if (item.title != "camera") {
+                if (item.title != "camera")
+                {
                     NavigationBarItem(
                         selected = currentRoute == item.screen.route,
                         onClick = {
@@ -197,12 +209,14 @@ fun BottomBar(
                             }
                         },
                         icon = {
-                            if (currentRoute == item.screen.route) {
+                            if (currentRoute == item.screen.route)
+                            {
                                 Icon(
                                     imageVector = item.selectedIcon ?: item.icon,
                                     contentDescription = item.title,
                                 )
-                            } else {
+                            } else
+                            {
                                 Icon(
                                     imageVector = item.icon,
                                     contentDescription = item.title
@@ -220,7 +234,8 @@ fun BottomBar(
                             Text(item.title)
                         }
                     )
-                } else {
+                } else
+                {
                     Spacer(
                         modifier = Modifier.width(32.dp)
                     )

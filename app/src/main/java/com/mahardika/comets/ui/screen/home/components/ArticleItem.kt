@@ -25,7 +25,8 @@ fun ArticleItem(
     modifier: Modifier = Modifier,
     title: String,
     description: String
-) {
+)
+{
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
         shadowElevation = 4.dp,

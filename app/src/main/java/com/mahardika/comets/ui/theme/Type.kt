@@ -6,13 +6,26 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.mahardika.comets.R
 
-object AppFont {
+object AppFont
+{
     val Poppins = FontFamily(
-        Font(R.font.poppins_light, FontWeight.Light),
+        Font(
+            R.font.poppins_light,
+            FontWeight.Light
+        ),
         Font(R.font.poppins_regular),
-        Font(R.font.poppins_medium, FontWeight.Medium),
-        Font(R.font.poppins_semibold, FontWeight.SemiBold),
-        Font(R.font.poppins_bold, FontWeight.Bold),
+        Font(
+            R.font.poppins_medium,
+            FontWeight.Medium
+        ),
+        Font(
+            R.font.poppins_semibold,
+            FontWeight.SemiBold
+        ),
+        Font(
+            R.font.poppins_bold,
+            FontWeight.Bold
+        ),
     )
 }
 

@@ -20,7 +20,8 @@ import com.mahardika.comets.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar() {
+fun TopBar()
+{
     Surface(
         shadowElevation = 4.dp,
     ) {

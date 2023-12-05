@@ -19,7 +19,8 @@ fun MoodItem(
     mood: String,
     day: String,
     icon: ImageVector
-) {
+)
+{
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

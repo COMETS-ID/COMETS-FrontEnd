@@ -22,7 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun JournalScreen() {
+fun JournalScreen()
+{
     val scrollState = rememberScrollState()
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
@@ -36,7 +37,8 @@ fun JournalScreen() {
 
 @Composable
 fun MoodSection(
-) {
+)
+{
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -85,7 +87,8 @@ fun MoodItem(
     mood: String,
     day: String,
     icon: ImageVector
-) {
+)
+{
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

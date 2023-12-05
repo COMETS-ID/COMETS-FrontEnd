@@ -10,7 +10,8 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ConnectScreen(
     modifier: Modifier = Modifier
-) {
+)
+{
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

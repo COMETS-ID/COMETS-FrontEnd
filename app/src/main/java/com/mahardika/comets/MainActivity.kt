@@ -8,8 +8,10 @@ import androidx.compose.material3.Surface
 import com.mahardika.comets.ui.CometsApp
 import com.mahardika.comets.ui.theme.CometsTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainActivity : ComponentActivity()
+{
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContent {
             CometsTheme {
