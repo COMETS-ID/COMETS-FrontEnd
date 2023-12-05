@@ -148,7 +148,7 @@ fun BottomBar(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = modifier
-                .clip(RoundedCornerShape(24.dp, 24.dp, 0.dp, 0.dp))
+                .clip(RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp))
         ) {
             val navigationItems = listOf(
                 NavigationItem(
