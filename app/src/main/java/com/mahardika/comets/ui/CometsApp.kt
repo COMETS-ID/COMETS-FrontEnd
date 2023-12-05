@@ -41,6 +41,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mahardika.comets.R
+import com.mahardika.comets.ui.components.TopBar
 import com.mahardika.comets.ui.navigation.NavigationItem
 import com.mahardika.comets.ui.navigation.Screen
 import com.mahardika.comets.ui.screen.camera.CameraScreen
@@ -76,6 +77,8 @@ fun CometsApp(
                         }
                     )
                 }
+            } else {
+                TopBar()
             }
         },
         bottomBar = {
