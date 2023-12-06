@@ -14,32 +14,39 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.mahardika.comets.R
 
 @Composable
 fun ArticleItem(
     modifier: Modifier = Modifier,
     title: String,
-    description: String
+    description: String,
+    imageUrl: String
 )
 {
     Surface(
-        color = MaterialTheme.colorScheme.primaryContainer,
+        color = MaterialTheme.colorScheme.surface,
         shadowElevation = 4.dp,
-        modifier = modifier.clip(RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        modifier = modifier
     ) {
         Column {
-            Image(
-                painter = painterResource(R.drawable.logo),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(color = MaterialTheme.colorScheme.surface)
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.height(128.dp)
             )
             Spacer(modifier = Modifier.height(4.dp))
             Column(
@@ -47,7 +54,7 @@ fun ArticleItem(
             ) {
                 Text(
                     text = title,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = description,

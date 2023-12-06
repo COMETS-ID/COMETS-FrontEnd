@@ -3,6 +3,7 @@ package com.mahardika.comets.ui.screen.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mahardika.comets.ui.commons.ArticleItemContent
 import com.mahardika.comets.ui.screen.home.components.ArticleItem
 import com.mahardika.comets.ui.screen.home.components.MoodItem
 
@@ -45,7 +49,7 @@ fun HomeScreen()
     ) {
         HeaderSection()
         Surface(
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             modifier = Modifier.clip(
                 shape = RoundedCornerShape(
                     32.dp,
@@ -58,11 +62,12 @@ fun HomeScreen()
             Column(
                 verticalArrangement = Arrangement.spacedBy(32.dp),
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(horizontal = 24.dp)
             ) {
                 Spacer(modifier = Modifier)
                 MoodSection()
                 ArticleSection()
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }
@@ -114,7 +119,7 @@ fun StatisticSection()
         ) {
             Text(
                 text = "Statistic",
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onPrimary
             )
@@ -129,40 +134,43 @@ fun StatisticSection()
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(color = MaterialTheme.colorScheme.primaryContainer)
-                .padding(16.dp)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
                     text = "Mental Health Score",
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
-                Text(
-                    text = "70",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        text = "70",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Text(
+                        text = "/100",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
             Column(
                 modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
                     text = "Today's Mood",
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
                     text = "Neutral",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -189,7 +197,7 @@ fun MoodSection(
         Text(
             text = "5-day mood history",
             fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.Medium,
         )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -228,40 +236,47 @@ fun MoodSection(
 @Composable
 fun ArticleSection()
 {
+    val articleList = listOf(
+        ArticleItemContent(
+            title = "Lorem Ipsum Dolor Sit Amet",
+            description = "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+            imageUrl = "https://source.unsplash.com/random"
+        ),
+        ArticleItemContent(
+            title = "Lorem Ipsum Dolor Sit Amet",
+            description = "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+            imageUrl = "https://source.unsplash.com/random"
+        ),
+        ArticleItemContent(
+            title = "Lorem Ipsum Dolor Sit Amet",
+            description = "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+            imageUrl = "https://source.unsplash.com/random"
+        )
+    )
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = "Articles for you",
             fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.Medium
         )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp)
             ) {
-                item {
+                items(
+                    items = articleList
+                ) {item ->
                     ArticleItem(
-                        title = "Lorem Ipsum Dolor Sit Amet",
-                        description = "Lorem ipsum dolor sit amet consectetur adipiscing elit",
-                        modifier = Modifier.fillParentMaxWidth(0.5f)
-                    )
-                }
-                item {
-                    ArticleItem(
-                        title = "Lorem Ipsum Dolor Sit Amet",
-                        description = "Lorem ipsum dolor sit amet consectetur adipiscing elit",
-                        modifier = Modifier.fillParentMaxWidth(0.5f)
-                    )
-                }
-                item {
-                    ArticleItem(
-                        title = "Lorem Ipsum Dolor Sit Amet",
-                        description = "Lorem ipsum dolor sit amet consectetur adipiscing elit",
-                        modifier = Modifier.fillParentMaxWidth(0.5f)
+                        title = item.title,
+                        description = item.description,
+                        imageUrl = item.imageUrl,
+                        modifier = Modifier.fillParentMaxWidth(0.75f)
                     )
                 }
             }

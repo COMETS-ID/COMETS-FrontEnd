@@ -2,6 +2,7 @@ package com.mahardika.comets.ui
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,9 +28,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +47,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.bottombar.AnimatedBottomBar
+import com.example.bottombar.components.BottomBarItem
+import com.example.bottombar.model.IndicatorStyle
+import com.example.bottombar.model.ItemStyle
 import com.mahardika.comets.R
 import com.mahardika.comets.ui.navigation.NavigationItem
 import com.mahardika.comets.ui.navigation.Screen
@@ -89,8 +100,7 @@ fun CometsApp(
                 currentRoute = currentRoute
             )
         },
-        modifier = modifier
-            .background(color = MaterialTheme.colorScheme.surface)
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -139,142 +149,72 @@ fun CometsAppPreview()
 
 @Composable
 fun BottomBar(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     currentRoute: String?
 )
 {
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = modifier.fillMaxWidth()
+    var selectedItem by remember { mutableIntStateOf(0) }
+
+    val navigationItems = listOf(
+        NavigationItem(
+            title = "Home",
+            icon = ImageVector.vectorResource(R.drawable.ic_home_outline),
+            selectedIcon = ImageVector.vectorResource(R.drawable.ic_home_fill),
+            screen = Screen.Home
+        ),
+        NavigationItem(
+            title = "Journal",
+            icon = ImageVector.vectorResource(R.drawable.ic_book_mutliple_online),
+            selectedIcon = ImageVector.vectorResource(R.drawable.ic_book_multiple_fill),
+            screen = Screen.Journal
+        ),
+        NavigationItem(
+            title = "Camera",
+            icon = ImageVector.vectorResource(R.drawable.ic_face_recognition),
+            selectedIcon = null,
+            screen = Screen.Camera
+        ),
+        NavigationItem(
+            title = "Connect",
+            icon = ImageVector.vectorResource(R.drawable.ic_account_group_outline),
+            selectedIcon = ImageVector.vectorResource(R.drawable.ic_account_group_fill),
+            screen = Screen.Connect
+        ),
+        NavigationItem(
+            title = "Profile",
+            icon = ImageVector.vectorResource(R.drawable.ic_account_outline),
+            selectedIcon = ImageVector.vectorResource(R.drawable.ic_account_fill),
+            screen = Screen.Profile
+        ),
+    )
+
+    AnimatedBottomBar(
+        selectedItem = selectedItem,
+        itemSize = navigationItems.size,
+        containerColor = MaterialTheme.colorScheme.surface,
+        containerShape = RoundedCornerShape(16.dp),
+        indicatorStyle = IndicatorStyle.LINE,
+        indicatorColor = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.shadow(16.dp)
     ) {
-        NavigationBar(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            modifier = modifier
-                .clip(
-                    RoundedCornerShape(
-                        16.dp,
-                        16.dp,
-                        0.dp,
-                        0.dp
-                    )
-                )
-        ) {
-            val navigationItems = listOf(
-                NavigationItem(
-                    title = "Home",
-                    icon = ImageVector.vectorResource(R.drawable.ic_home_outline),
-                    selectedIcon = ImageVector.vectorResource(R.drawable.ic_home_fill),
-                    screen = Screen.Home
-                ),
-                NavigationItem(
-                    title = "Journal",
-                    icon = ImageVector.vectorResource(R.drawable.ic_book_mutliple_online),
-                    selectedIcon = ImageVector.vectorResource(R.drawable.ic_book_multiple_fill),
-                    screen = Screen.Journal
-                ),
-                NavigationItem(
-                    title = "camera",
-                    icon = ImageVector.vectorResource(R.drawable.ic_face_recognition),
-                    selectedIcon = null,
-                    screen = Screen.Camera
-                ),
-                NavigationItem(
-                    title = "Connect",
-                    icon = ImageVector.vectorResource(R.drawable.ic_account_group_outline),
-                    selectedIcon = ImageVector.vectorResource(R.drawable.ic_account_group_fill),
-                    screen = Screen.Connect
-                ),
-                NavigationItem(
-                    title = "Profile",
-                    icon = ImageVector.vectorResource(R.drawable.ic_account_outline),
-                    selectedIcon = ImageVector.vectorResource(R.drawable.ic_account_fill),
-                    screen = Screen.Profile
-                ),
-            )
-
-            navigationItems.map { item ->
-                if (item.title != "camera")
-                {
-                    NavigationBarItem(
-                        selected = currentRoute == item.screen.route,
-                        onClick = {
-                            navController.navigate(item.screen.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                restoreState = true
-                                launchSingleTop = true
-                            }
-                        },
-                        icon = {
-                            if (currentRoute == item.screen.route)
-                            {
-                                Icon(
-                                    imageVector = item.selectedIcon ?: item.icon,
-                                    contentDescription = item.title,
-                                )
-                            } else
-                            {
-                                Icon(
-                                    imageVector = item.icon,
-                                    contentDescription = item.title
-                                )
-                            }
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
-                            unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                            selectedTextColor = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        label = {
-                            Text(item.title)
-                        }
-                    )
-                } else
-                {
-                    Spacer(
-                        modifier = Modifier.width(32.dp)
-                    )
-                }
-            }
-        }
-
-        Surface(
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier
-                .size(96.dp)
-                .offset(
-                    y = (-80).dp / 2
-                )
-                .clip(CircleShape)
-                .clickable {
-                    navController.navigate(Screen.Camera.route) {
+        navigationItems.forEachIndexed { index, item ->
+            BottomBarItem(
+                selected = currentRoute == item.screen.route,
+                onClick = {
+                    navController.navigate(item.screen.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
                         restoreState = true
                         launchSingleTop = true
                     }
-                }
-        ) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .requiredSize(80.dp)
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_face_recognition),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .requiredSize(40.dp)
-                )
-            }
+                    selectedItem = index
+                },
+                imageVector = item.icon,
+                label = item.title,
+                itemStyle = ItemStyle.STYLE4,
+                iconColor = MaterialTheme.colorScheme.primary,
+            )
         }
     }
 }
