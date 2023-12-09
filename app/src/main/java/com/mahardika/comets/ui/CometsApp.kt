@@ -3,43 +3,53 @@ package com.mahardika.comets.ui
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -47,10 +57,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.bottombar.AnimatedBottomBar
-import com.example.bottombar.components.BottomBarItem
-import com.example.bottombar.model.IndicatorStyle
-import com.example.bottombar.model.ItemStyle
+import com.mahardika.comets.AppDependencies
 import com.mahardika.comets.R
 import com.mahardika.comets.ui.navigation.NavigationItem
 import com.mahardika.comets.ui.navigation.Screen
@@ -59,13 +66,15 @@ import com.mahardika.comets.ui.screen.connect.ConnectScreen
 import com.mahardika.comets.ui.screen.home.HomeScreen
 import com.mahardika.comets.ui.screen.journal.JournalScreen
 import com.mahardika.comets.ui.screen.profile.ProfileScreen
-import com.mahardika.comets.ui.theme.CometsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CometsApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    appDependencies: AppDependencies,
+    shouldShowCamera: State<Boolean>,
+    onShouldShowCameraChange: (Boolean) -> Unit,
 )
 {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -100,7 +109,7 @@ fun CometsApp(
                 currentRoute = currentRoute
             )
         },
-        containerColor = MaterialTheme.colorScheme.surfaceVariant
+        containerColor = MaterialTheme.colorScheme.surface
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -120,13 +129,17 @@ fun CometsApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(navController = navController)
             }
             composable(Screen.Journal.route) {
                 JournalScreen()
             }
             composable(Screen.Camera.route) {
-                CameraScreen()
+                CameraScreen(
+                    appDependencies = appDependencies,
+                    shouldShowCamera = shouldShowCamera,
+                    onShouldShowCameraChange = onShouldShowCameraChange
+                )
             }
             composable(Screen.Connect.route) {
                 ConnectScreen()
@@ -135,15 +148,6 @@ fun CometsApp(
                 ProfileScreen()
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun CometsAppPreview()
-{
-    CometsTheme {
-        CometsApp()
     }
 }
 
@@ -158,8 +162,8 @@ fun BottomBar(
     val navigationItems = listOf(
         NavigationItem(
             title = "Home",
-            icon = ImageVector.vectorResource(R.drawable.ic_home_outline),
-            selectedIcon = ImageVector.vectorResource(R.drawable.ic_home_fill),
+            icon = Icons.Outlined.Home,
+            selectedIcon = Icons.Default.Home,
             screen = Screen.Home
         ),
         NavigationItem(
@@ -167,12 +171,6 @@ fun BottomBar(
             icon = ImageVector.vectorResource(R.drawable.ic_book_mutliple_online),
             selectedIcon = ImageVector.vectorResource(R.drawable.ic_book_multiple_fill),
             screen = Screen.Journal
-        ),
-        NavigationItem(
-            title = "Camera",
-            icon = ImageVector.vectorResource(R.drawable.ic_face_recognition),
-            selectedIcon = null,
-            screen = Screen.Camera
         ),
         NavigationItem(
             title = "Connect",
@@ -187,35 +185,146 @@ fun BottomBar(
             screen = Screen.Profile
         ),
     )
-
-    AnimatedBottomBar(
-        selectedItem = selectedItem,
-        itemSize = navigationItems.size,
-        containerColor = MaterialTheme.colorScheme.surface,
-        containerShape = RoundedCornerShape(16.dp),
-        indicatorStyle = IndicatorStyle.LINE,
-        indicatorColor = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.shadow(16.dp)
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 8.dp,
+        shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp)
     ) {
-        navigationItems.forEachIndexed { index, item ->
-            BottomBarItem(
-                selected = currentRoute == item.screen.route,
-                onClick = {
-                    navController.navigate(item.screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+        BottomNavigationBar(
+            selectedItem = selectedItem,
+            itemSize = navigationItems.size
+        ) {
+            navigationItems.forEachIndexed { index, item ->
+                NavigationBarItem(
+                    selected = currentRoute == item.screen.route,
+                    onClick = {
+                        navController.navigate(item.screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            restoreState = true
+                            launchSingleTop = true
                         }
-                        restoreState = true
-                        launchSingleTop = true
+                        selectedItem = index
+                    },
+                    icon = {
+                        if (currentRoute == item.screen.route) {
+                            Icon(
+                                imageVector = item.selectedIcon ?: item.icon,
+                                contentDescription = null
+                            )
+                        } else {
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = MaterialTheme.colorScheme.surface,
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary
+                    ),
+                    label = {
+                        Text(text = item.title)
                     }
-                    selectedItem = index
-                },
-                imageVector = item.icon,
-                label = item.title,
-                itemStyle = ItemStyle.STYLE4,
-                iconColor = MaterialTheme.colorScheme.primary,
-            )
+                )
+            }
         }
+    }
+}
+
+@Composable
+fun BottomNavigationBar(
+    modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface,
+    containerShape: Shape = RectangleShape,
+    selectedItem: Int? = null,
+    itemSize: Int? = null,
+    content: @Composable RowScope.() -> Unit
+){
+    Surface(
+        modifier = modifier,
+        color = containerColor,
+        contentColor = contentColor,
+        shape = containerShape
+    ) {
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            selectedItem?.let {
+                itemSize?.let {
+                    val maxWidth = this.maxWidth
+                    val animationSpec: AnimationSpec<Dp> = spring(
+                        dampingRatio = 1f,
+                        stiffness = Spring.StiffnessLow,
+                    )
+                    val indicatorPosition: Dp by animateDpAsState(
+                        targetValue = (maxWidth / (itemSize.takeIf { it != 0 }
+                            ?: 1)) * selectedItem,
+                        animationSpec = animationSpec,
+                        label = "indicator"
+                    )
+
+                    Box(
+                        modifier = Modifier.width(maxWidth / (itemSize.takeIf { it != 0 } ?: 1))
+                    ) {
+                        Box (
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = 4.dp)
+                                .customWormTransition(indicatorPosition,
+                                    MaterialTheme.colorScheme.primary,
+                                    maxWidth / (itemSize.takeIf { it != 0 } ?: 1)
+                                )
+                                .size(
+                                    height = 4.dp,
+                                    width = maxWidth / (itemSize.takeIf { it != 0 } ?: 1))
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(72.dp)
+                            .selectableGroup(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        content = content
+                    )
+                }
+            }
+        }
+    }
+}
+
+fun Modifier.customWormTransition(
+    offset: Dp,
+    indicatorColor: Color,
+    itemWidth: Dp,
+) = composed {
+    drawWithContent {
+        val distance = itemWidth.roundToPx()
+        val scrollPosition = (offset.toPx().div(distance))
+        val wormOffset = (scrollPosition % 1) * 2
+
+        val xPos = scrollPosition.toInt() * distance
+
+        val head = xPos + distance * 0f.coerceAtLeast(wormOffset - 1)
+        val tail = xPos + size.width + distance * 1f.coerceAtMost(wormOffset)
+
+        val adjustedHead = if (offset < 0.dp) head - distance else head
+        val adjustedTail = if (offset < 0.dp) tail - distance else tail
+
+        val worm = RoundRect(
+            adjustedHead, 0f, adjustedTail, size.height,
+            CornerRadius(50f)
+        )
+
+
+        val path = Path().apply { addRoundRect(worm) }
+        drawPath(path = path, color = indicatorColor)
     }
 }
 

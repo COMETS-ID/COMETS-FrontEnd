@@ -62,10 +62,16 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
 
     implementation("io.coil-kt:coil-compose:2.2.2")
 
-    implementation("io.github.canopas:bottombar:1.0.0")
+    implementation("androidx.camera:camera-camera2")
+    implementation("androidx.camera:camera-core:1.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.3.0")
+    implementation("androidx.camera:camera-view:1.3.0")
+
+    implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
