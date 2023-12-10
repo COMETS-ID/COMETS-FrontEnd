@@ -1,73 +1,85 @@
 package com.mahardika.comets.ui.screen.connect
 
-import android.icu.text.CaseMap.Title
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.launch
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.mahardika.comets.ui.navigation.Screen
+import com.mahardika.comets.ui.screen.classroom.ClassroomScreen
+import com.mahardika.comets.ui.screen.community_forum.CommunityForumScreen
+import com.mahardika.comets.ui.screen.pyschologist.PsychologistScreen
 
 @Composable
-fun ConnectScreen()
+fun ConnectScreen(
+    navController: NavHostController = rememberNavController()
+)
 {
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.padding(16.dp)
     ){
-        NavigationChips()
-    }
-}
+        var pageState by remember {
+            mutableIntStateOf(0)
+        }
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun NavigationChips() {
-    val pageState = rememberPagerState{
-        3
-    }
-    val coroutineScope = rememberCoroutineScope()
-    val pageList = listOf("Psychologist", "Community Forum", "Classroom")
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ){
-        itemsIndexed(items = pageList){ index, item ->
-            NavigationChip(title = item, isSelected = pageState.currentPage == index){
-                coroutineScope.launch {
-                    pageState.animateScrollToPage(index)
+        NavigationChips(){
+            itemsIndexed(items = Screen.Connect.children) { index, item ->
+                NavigationChip(title = item.title, isSelected = pageState == index) {
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        restoreState = true
+                        launchSingleTop = true
+                    }
+                    pageState = index
                 }
             }
         }
-    }
-    HorizontalPager(state = pageState) {
-        when(it){
-           0 -> PsychologistSection()
-           1 -> CommunitySection()
-            2 -> ClassroomSection()
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Connect.Psychologist.route
+        ) {
+            composable(Screen.Connect.Psychologist.route){
+                PsychologistScreen()
+            }
+            composable(Screen.Connect.CommunityForum.route){
+                CommunityForumScreen()
+            }
+            composable(Screen.Connect.Classroom.route){
+                ClassroomScreen()
+            }
         }
     }
+}
+
+@Composable
+fun NavigationChips(content: LazyListScope.() -> Unit) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        content = content
+    )
 }
 
 @Composable
@@ -95,21 +107,3 @@ fun NavigationChip(
     }
 }
 
-@Composable
-fun PsychologistSection() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Text(text = "Psychologist")
-    }
-}
-@Composable
-fun CommunitySection() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Text(text = "Community")
-    }
-}
-@Composable
-fun ClassroomSection() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Text(text = "Classroom")
-    }
-}

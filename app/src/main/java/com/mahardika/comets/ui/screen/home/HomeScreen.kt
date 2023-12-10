@@ -1,6 +1,5 @@
 package com.mahardika.comets.ui.screen.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,31 +39,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.mahardika.comets.ui.commons.ArticleItemContent
+import com.mahardika.comets.ui.commons.ProfileImageButton
+import com.mahardika.comets.ui.commons.SectionTitle
 import com.mahardika.comets.ui.navigation.Screen
 import com.mahardika.comets.ui.screen.home.components.ArticleItem
 import com.mahardika.comets.ui.screen.home.components.MoodItem
 import com.mahardika.comets.ui.screen.home.components.MoodSelectorItem
+import com.mahardika.comets.ui.viewmodels.HomeViewModel
 
 @Composable
-fun HomeScreen(
-    navController: NavHostController
-){
+fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+    viewModel.getUserData()
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.primary)
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         var topHeight by remember { mutableStateOf(0.dp) }
         val maxHeight = this.maxHeight
         val density = LocalDensity.current
-
         val remainingHeight = maxHeight - topHeight
-        Log.d("max height", maxHeight.toString())
-        Log.d("top height", topHeight.toString())
-        Log.d("remaining height", remainingHeight.toString())
 
         TopSection(
             modifier = Modifier
@@ -74,7 +72,8 @@ fun HomeScreen(
                     topHeight = with(density) {
                         it.size.height.toDp()
                     }
-                }
+                },
+            navController = navController
         )
         BottomSection(
             modifier = Modifier
@@ -91,7 +90,7 @@ fun HomeScreen(
                 )
         )
 
-        val centerHeight = 64.dp
+        val centerHeight = 56.dp
         val centerBottomPadding = remainingHeight - centerHeight / 2
 
         MenuSection(
@@ -119,21 +118,25 @@ fun HomeScreen(
 
 @Composable
 fun TopSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
-    Column(modifier = modifier
-        .background(MaterialTheme.colorScheme.primary)
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.primary)
     ) {
-        HeaderSection()
+        HeaderSection(
+            navController = navController
+        )
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
 @Composable
-fun BottomSection(
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.background(MaterialTheme.colorScheme.surface)) {
+fun BottomSection(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+    ) {
         Spacer(modifier = Modifier.height(64.dp))
         MoodSection(modifier = Modifier.padding(horizontal = 24.dp))
         Spacer(modifier = Modifier.height(32.dp))
@@ -142,16 +145,15 @@ fun BottomSection(
 }
 
 @Composable
-fun MenuSection(
-    modifier: Modifier = Modifier
-) {
+fun MenuSection(modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.secondary,
         shadowElevation = 8.dp,
         shape = RoundedCornerShape(24.dp)
     ) {
-        Row(horizontalArrangement = Arrangement.SpaceEvenly,
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Check your mood now")
@@ -164,8 +166,9 @@ fun MenuSection(
 }
 
 @Composable
-fun HeaderSection()
-{
+fun HeaderSection(
+    navController: NavHostController
+) {
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
@@ -187,11 +190,25 @@ fun HeaderSection()
                     fontSize = 24.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                    ProfileImageButton(modifier = Modifier.clickable {
+                        navController.navigate(Screen.Profile.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            restoreState = true
+                            launchSingleTop = true
+                        }
+                    })
+                }
             }
         }
         HowAreYouSection()
@@ -199,9 +216,8 @@ fun HeaderSection()
 }
 
 @Composable
-fun HowAreYouSection()
-{
-    Column() {
+fun HowAreYouSection() {
+    Column {
         Text(
             text = "How are you today?",
             color = MaterialTheme.colorScheme.onPrimary
@@ -253,19 +269,12 @@ fun HowAreYouSection()
 }
 
 @Composable
-fun MoodSection(
-    modifier: Modifier = Modifier
-)
-{
+fun MoodSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Text(
-            text = "5-day mood history",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
-        )
+        SectionTitle(text = "5-day mood history")
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
@@ -295,14 +304,12 @@ fun MoodSection(
                 day = "Mon",
                 icon = Icons.Default.Person
             )
-
         }
     }
 }
 
 @Composable
-fun ArticleSection()
-{
+fun ArticleSection() {
     val articleList = listOf(
         ArticleItemContent(
             title = "Lorem Ipsum Dolor Sit Amet",
@@ -323,14 +330,12 @@ fun ArticleSection()
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Text(
+        SectionTitle(
             text = "Articles for you",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(start = 24.dp)
         )
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             LazyRow(
@@ -339,7 +344,7 @@ fun ArticleSection()
             ) {
                 items(
                     items = articleList
-                ) {item ->
+                ) { item ->
                     ArticleItem(
                         title = item.title,
                         description = item.description,
@@ -351,4 +356,3 @@ fun ArticleSection()
         }
     }
 }
-

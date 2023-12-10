@@ -9,7 +9,6 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,8 +36,10 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import coil.compose.rememberAsyncImagePainter
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import com.mahardika.comets.AppDependencies
+import com.mahardika.comets.ui.navigation.Screen
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -52,13 +53,12 @@ fun CameraScreen(
     appDependencies: AppDependencies,
     shouldShowCamera: State<Boolean>,
     onShouldShowCameraChange: (Boolean) -> Unit,
+    onSetUri: (Uri) -> Unit,
+    navController: NavHostController
 )
 {
     var shouldShowPhoto by remember {
         mutableStateOf(false)
-    }
-    var uri by remember {
-        mutableStateOf(Uri.parse(""))
     }
 
     if (shouldShowCamera.value) {
@@ -69,19 +69,22 @@ fun CameraScreen(
                 Log.d("image_captured", "Image captured: $it")
                 onShouldShowCameraChange(false)
                 shouldShowPhoto = true
-                uri = it
+                onSetUri(it)
             },
             onError = {
                 Log.e("image_capture_error", "Error: ", it)
             }
         )
     } else if (shouldShowPhoto) {
-        Image(
-            painter = rememberAsyncImagePainter(uri),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize()
-        )
-    } else {
+        navController.navigate(Screen.CameraResult.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
+    else {
         Text(text = "Need camera permission")
     }
 }
@@ -146,7 +149,7 @@ fun CameraView(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(200.dp)
                     .padding(1.dp)
                     .border(
                         1.dp,

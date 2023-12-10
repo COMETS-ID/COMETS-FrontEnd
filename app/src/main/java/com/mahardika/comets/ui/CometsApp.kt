@@ -1,11 +1,14 @@
 package com.mahardika.comets.ui
 
+import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -34,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -57,20 +61,25 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.mahardika.comets.AppDependencies
 import com.mahardika.comets.R
+import com.mahardika.comets.ui.commons.ProfileImageButton
 import com.mahardika.comets.ui.navigation.NavigationItem
 import com.mahardika.comets.ui.navigation.Screen
 import com.mahardika.comets.ui.screen.camera.CameraScreen
+import com.mahardika.comets.ui.screen.camera_result.CameraResultScreen
 import com.mahardika.comets.ui.screen.connect.ConnectScreen
 import com.mahardika.comets.ui.screen.home.HomeScreen
 import com.mahardika.comets.ui.screen.journal.JournalScreen
+import com.mahardika.comets.ui.screen.login.LoginScreen
+import com.mahardika.comets.ui.screen.onboarding.OnboardingScreen
 import com.mahardika.comets.ui.screen.profile.ProfileScreen
+import com.mahardika.comets.ui.screen.signup.SignupScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CometsApp(
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     appDependencies: AppDependencies,
     shouldShowCamera: State<Boolean>,
@@ -79,37 +88,62 @@ fun CometsApp(
 {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val currentScreen = when (currentRoute) {
+        Screen.Home.route -> Screen.Home
+        Screen.Journal.route -> Screen.Journal
+        Screen.Camera.route -> Screen.Camera
+        Screen.CameraResult.route -> Screen.CameraResult
+        Screen.Connect.route -> Screen.Connect
+        Screen.Connect.Psychologist.route -> Screen.Connect.Psychologist
+        Screen.Connect.CommunityForum.route -> Screen.Connect.CommunityForum
+        Screen.Connect.Classroom.route -> Screen.Connect.Classroom
+        Screen.Profile.route -> Screen.Profile
+        else -> null
+    }
+
+    var uri by remember {
+        mutableStateOf(Uri.parse(""))
+    }
 
     Scaffold(
         topBar = {
-            if (currentRoute != Screen.Home.route)
-            {
+            if (currentScreen?.showTopBar == true) {
                 Surface(
                     shadowElevation = 4.dp
                 ) {
                     CenterAlignedTopAppBar(
                         title = {
                             Text(
-                                text = currentRoute.toString().replaceFirstChar {
-                                    it.titlecase()
-                                },
+                                text = currentScreen.title,
                                 fontWeight = FontWeight.SemiBold
+                            )
+                        },
+                        actions = {
+                            ProfileImageButton(
+                                modifier = Modifier.clickable {
+                                    navController.navigate(Screen.Profile.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            inclusive = true
+                                        }
+                                        restoreState = true
+                                        launchSingleTop = true
+                                    }
+                                }
                             )
                         }
                     )
                 }
-            } else
-            {
-//                TopBar()
             }
         },
         bottomBar = {
-            BottomBar(
-                navController = navController,
-                currentRoute = currentRoute
-            )
+            if (currentScreen?.showBottomBar == true) {
+                BottomBar(
+                    navController = navController,
+                    currentRoute = currentRoute
+                )
+            }
         },
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -138,14 +172,32 @@ fun CometsApp(
                 CameraScreen(
                     appDependencies = appDependencies,
                     shouldShowCamera = shouldShowCamera,
-                    onShouldShowCameraChange = onShouldShowCameraChange
+                    onShouldShowCameraChange = onShouldShowCameraChange,
+                    onSetUri = {
+                        uri = it
+                    },
+                    navController = navController
                 )
+            }
+            composable(Screen.CameraResult.route) {
+                CameraResultScreen(uri = uri)
             }
             composable(Screen.Connect.route) {
                 ConnectScreen()
             }
             composable(Screen.Profile.route) {
-                ProfileScreen()
+                ProfileScreen(navController = navController)
+            }
+            navigation(route = Screen.Authentication.route, startDestination = Screen.Authentication.Onboarding.route){
+                composable(Screen.Authentication.Onboarding.route){
+                    OnboardingScreen(navController = navController)
+                }
+                composable(Screen.Authentication.Login.route) {
+                    LoginScreen(navController)
+                }
+                composable(Screen.Authentication.Signup.route) {
+                    SignupScreen(navController)
+                }
             }
         }
     }
@@ -158,6 +210,11 @@ fun BottomBar(
 )
 {
     var selectedItem by remember { mutableIntStateOf(0) }
+
+    BackHandler {
+        selectedItem = 0
+        navController.popBackStack()
+    }
 
     val navigationItems = listOf(
         NavigationItem(
@@ -177,12 +234,6 @@ fun BottomBar(
             icon = ImageVector.vectorResource(R.drawable.ic_account_group_outline),
             selectedIcon = ImageVector.vectorResource(R.drawable.ic_account_group_fill),
             screen = Screen.Connect
-        ),
-        NavigationItem(
-            title = "Profile",
-            icon = ImageVector.vectorResource(R.drawable.ic_account_outline),
-            selectedIcon = ImageVector.vectorResource(R.drawable.ic_account_fill),
-            screen = Screen.Profile
         ),
     )
     Surface(
@@ -223,7 +274,9 @@ fun BottomBar(
                     colors = NavigationBarItemDefaults.colors(
                         indicatorColor = MaterialTheme.colorScheme.surface,
                         selectedIconColor = MaterialTheme.colorScheme.primary,
-                        selectedTextColor = MaterialTheme.colorScheme.primary
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurface
                     ),
                     label = {
                         Text(text = item.title)

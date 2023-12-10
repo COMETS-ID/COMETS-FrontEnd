@@ -1,9 +1,10 @@
 package com.mahardika.comets
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,10 +16,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.mahardika.comets.ui.CometsApp
 import com.mahardika.comets.ui.theme.CometsTheme
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity()
 {
     private val appDependencies by lazy {
@@ -27,8 +30,8 @@ class MainActivity : ComponentActivity()
             cameraExecutor = Executors.newSingleThreadExecutor(),
         )
     }
-
     private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -61,9 +64,9 @@ class MainActivity : ComponentActivity()
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            Log.d("camera_permission", "Permission Granted")
+            showToast(applicationContext, "Camera permission granted")
         } else {
-            Log.d("camera_permission", "Permission Denied")
+            showToast(applicationContext, "Camera permission denied. Some features will be unavailable")
         }
     }
 
@@ -73,14 +76,13 @@ class MainActivity : ComponentActivity()
                 this,
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                Log.d("camera_permission", "Permission already granted")
                 shouldShowCamera.value = true
             }
 
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.CAMERA
-            ) -> Log.d("camera_permission", "Show camera request permission dialog")
+            ) -> showToast(applicationContext, "Camera permission is required to access important feature")
 
             else -> requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
@@ -93,6 +95,10 @@ class MainActivity : ComponentActivity()
 
         return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
     }
+}
+
+fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(context, message, duration).show()
 }
 
 class AppDependencies(
