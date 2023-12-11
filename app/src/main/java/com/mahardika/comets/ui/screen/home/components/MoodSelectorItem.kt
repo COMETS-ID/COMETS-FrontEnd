@@ -1,5 +1,6 @@
 package com.mahardika.comets.ui.screen.home.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,12 +22,23 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MoodSelectorItem(
     modifier: Modifier = Modifier,
-    icon: ImageVector,
-    mood: String
-){
+    selectedIcon: ImageVector,
+    unselectedIcon: ImageVector,
+    isSelected: Boolean,
+    mood: String,
+) {
     Box(
         modifier = modifier
-            .border(1.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(16.dp))
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.onPrimary,
+                RoundedCornerShape(16.dp)
+            )
+            .background(
+                color = if (isSelected) MaterialTheme.colorScheme.tertiary else Color.Transparent
+            ),
+
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -33,10 +47,14 @@ fun MoodSelectorItem(
             modifier = Modifier.padding(8.dp)
         ) {
             Icon(
-                imageVector = icon,
+                imageVector = if (isSelected) selectedIcon else unselectedIcon,
                 contentDescription = null
             )
-            Text(text = mood, fontSize = 12.sp, color = MaterialTheme.colorScheme.onPrimary)
+            Text(
+                text = mood,
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 }

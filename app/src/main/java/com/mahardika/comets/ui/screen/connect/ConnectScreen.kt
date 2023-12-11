@@ -3,11 +3,15 @@ package com.mahardika.comets.ui.screen.connect
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,13 +40,14 @@ fun ConnectScreen(
 )
 {
     Column(
-        verticalArrangement = Arrangement.spacedBy(32.dp),
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            .verticalScroll(rememberScrollState()),
     ){
         var pageState by remember {
             mutableIntStateOf(0)
         }
-
+        Spacer(modifier = Modifier.height(8.dp))
         NavigationChips(){
             itemsIndexed(items = Screen.Connect.children) { index, item ->
                 NavigationChip(title = item.title, isSelected = pageState == index) {
@@ -57,9 +62,10 @@ fun ConnectScreen(
                 }
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
         NavHost(
             navController = navController,
-            startDestination = Screen.Connect.Psychologist.route
+            startDestination = Screen.Connect.Psychologist.route,
         ) {
             composable(Screen.Connect.Psychologist.route){
                 PsychologistScreen()

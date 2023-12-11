@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Mood
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -25,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,11 +32,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,11 +49,16 @@ import com.mahardika.comets.ui.navigation.Screen
 import com.mahardika.comets.ui.screen.home.components.ArticleItem
 import com.mahardika.comets.ui.screen.home.components.MoodItem
 import com.mahardika.comets.ui.screen.home.components.MoodSelectorItem
-import com.mahardika.comets.ui.viewmodels.HomeViewModel
+import com.mahardika.comets.utils.Mood
 
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
-    viewModel.getUserData()
+fun HomeScreen(
+    navController: NavHostController,
+    viewModel: HomeViewModel = hiltViewModel(),
+) {
+    val homeUiState by viewModel.uiState.collectAsState()
+    val todayMoods = viewModel.userTodayMoods
+
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -64,17 +69,20 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
         val density = LocalDensity.current
         val remainingHeight = maxHeight - topHeight
 
-        TopSection(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .onGloballyPositioned {
-                    topHeight = with(density) {
-                        it.size.height.toDp()
-                    }
-                },
-            navController = navController
-        )
+        TopSection(modifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.TopCenter)
+            .onGloballyPositioned {
+                topHeight = with(density) {
+                    it.size.height.toDp()
+                }
+            },
+            navController = navController,
+            todayMoods = todayMoods,
+            todayMood = homeUiState.todayMood,
+            setTodayMood = {
+                viewModel.setUserMood(it)
+            })
         BottomSection(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,84 +101,39 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
         val centerHeight = 56.dp
         val centerBottomPadding = remainingHeight - centerHeight / 2
 
-        MenuSection(
-            modifier = Modifier
-                .padding(
-                    bottom = centerBottomPadding,
-                    start = 32.dp,
-                    end = 32.dp
-                )
-                .fillMaxWidth()
-                .height(centerHeight)
-                .align(Alignment.BottomCenter)
-                .clickable {
-                    navController.navigate(Screen.Camera.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        restoreState = true
-                        launchSingleTop = true
+        MenuSection(modifier = Modifier
+            .padding(
+                bottom = centerBottomPadding,
+                start = 32.dp,
+                end = 32.dp
+            )
+            .fillMaxWidth()
+            .height(centerHeight)
+            .align(Alignment.BottomCenter)
+            .clickable {
+                navController.navigate(Screen.Camera.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
+                    restoreState = true
+                    launchSingleTop = true
                 }
-        )
+            })
     }
 }
 
 @Composable
 fun TopSection(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    todayMoods: List<Mood>,
+    todayMood: Mood?,
+    setTodayMood: (Mood) -> Unit,
 ) {
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.primary)
-    ) {
-        HeaderSection(
-            navController = navController
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-    }
-}
-
-@Composable
-fun BottomSection(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant)
-    ) {
-        Spacer(modifier = Modifier.height(64.dp))
-        MoodSection(modifier = Modifier.padding(horizontal = 24.dp))
-        Spacer(modifier = Modifier.height(32.dp))
-        ArticleSection()
-    }
-}
-
-@Composable
-fun MenuSection(modifier: Modifier = Modifier) {
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.secondary,
-        shadowElevation = 8.dp,
-        shape = RoundedCornerShape(24.dp)
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Check your mood now")
-            Icon(
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = null
-            )
-        }
-    }
-}
-
-@Composable
-fun HeaderSection(
-    navController: NavHostController
-) {
-    Column(
-        modifier = Modifier.padding(16.dp),
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         Column {
@@ -211,65 +174,70 @@ fun HeaderSection(
                 }
             }
         }
-        HowAreYouSection()
-    }
-}
-
-@Composable
-fun HowAreYouSection() {
-    Column {
-        Text(
-            text = "How are you today?",
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .fillMaxWidth()
-        ) {
-            MoodSelectorItem(
-                icon = Icons.Default.Mood,
-                mood = "Angry",
-                modifier = Modifier.weight(1f)
+        Column {
+            Text(
+                text = "How are you today?",
+                color = MaterialTheme.colorScheme.onPrimary
             )
-            MoodSelectorItem(
-                icon = Icons.Default.Mood,
-                mood = "Sad",
-                modifier = Modifier.weight(1f)
-            )
-            MoodSelectorItem(
-                icon = Icons.Default.Mood,
-                mood = "Neutral",
-                modifier = Modifier.weight(1f)
-            )
-            MoodSelectorItem(
-                icon = Icons.Default.Mood,
-                mood = "Good",
-                modifier = Modifier.weight(1f)
-            )
-            MoodSelectorItem(
-                icon = Icons.Default.Mood,
-                mood = "Happy",
-                modifier = Modifier.weight(1f)
-            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                todayMoods.forEach {
+                    MoodSelectorItem(
+                        selectedIcon = ImageVector.vectorResource(id = it.moodSelectedIcon),
+                        unselectedIcon = ImageVector.vectorResource(id = it.moodUnselectedIcon),
+                        mood = it.moodName,
+                        isSelected = todayMood == it,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { setTodayMood(it) })
+                }
+            }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Based on the assessment you have done before",
-            textAlign = TextAlign.Center,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Light,
-            fontStyle = FontStyle.Italic,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 
 @Composable
-fun MoodSection(modifier: Modifier = Modifier) {
+fun BottomSection(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+    ) {
+        Spacer(modifier = Modifier.height(64.dp))
+        MoodSection(modifier = Modifier.padding(horizontal = 24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+        ArticleSection()
+    }
+}
+
+@Composable
+fun MenuSection(modifier: Modifier = Modifier) {
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.secondary,
+        shadowElevation = 8.dp,
+        shape = RoundedCornerShape(24.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Check your mood now")
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@Composable
+fun MoodSection(
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),

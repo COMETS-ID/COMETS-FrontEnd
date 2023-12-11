@@ -1,6 +1,7 @@
 package com.mahardika.comets.ui
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -20,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Home
@@ -104,6 +104,7 @@ fun CometsApp(
     var uri by remember {
         mutableStateOf(Uri.parse(""))
     }
+    Log.d("route", currentScreen?.route.toString())
 
     Scaffold(
         topBar = {
@@ -206,7 +207,7 @@ fun CometsApp(
 @Composable
 fun BottomBar(
     navController: NavHostController,
-    currentRoute: String?
+    currentRoute: String?,
 )
 {
     var selectedItem by remember { mutableIntStateOf(0) }
@@ -236,53 +237,47 @@ fun BottomBar(
             screen = Screen.Connect
         ),
     )
-    Surface(
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 8.dp,
-        shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp)
+    BottomNavigationBar(
+        selectedItem = selectedItem,
+        itemSize = navigationItems.size
     ) {
-        BottomNavigationBar(
-            selectedItem = selectedItem,
-            itemSize = navigationItems.size
-        ) {
-            navigationItems.forEachIndexed { index, item ->
-                NavigationBarItem(
-                    selected = currentRoute == item.screen.route,
-                    onClick = {
-                        navController.navigate(item.screen.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            restoreState = true
-                            launchSingleTop = true
+        navigationItems.forEachIndexed { index, item ->
+            NavigationBarItem(
+                selected = currentRoute == item.screen.route,
+                onClick = {
+                    navController.navigate(item.screen.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
-                        selectedItem = index
-                    },
-                    icon = {
-                        if (currentRoute == item.screen.route) {
-                            Icon(
-                                imageVector = item.selectedIcon ?: item.icon,
-                                contentDescription = null
-                            )
-                        } else {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = null
-                            )
-                        }
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = MaterialTheme.colorScheme.surface,
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                        selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    label = {
-                        Text(text = item.title)
+                        restoreState = true
+                        launchSingleTop = true
                     }
-                )
-            }
+                    selectedItem = index
+                },
+                icon = {
+                    if (currentRoute == item.screen.route) {
+                        Icon(
+                            imageVector = item.selectedIcon ?: item.icon,
+                            contentDescription = null
+                        )
+                    } else {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = null
+                        )
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.surface,
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurface
+                ),
+                label = {
+                    Text(text = item.title)
+                }
+            )
         }
     }
 }

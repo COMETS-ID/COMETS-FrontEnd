@@ -6,7 +6,7 @@ sealed class Screen(val route: String, val title: String = "Comets", val showTop
     object Journal : Screen("journal", title = "Journal")
     object Camera : Screen("camera", title = "Camera", showTopBar = false, showBottomBar = false)
     object CameraResult : Screen("camera_result", title = "Camera Result")
-    object Connect : Screen("connect", title = "Connect", showTopBar = false, showBottomBar = false) {
+    object Connect : Screen("connect", title = "Connect") {
         val children: List<Screen> by lazy {
             listOf(Psychologist, CommunityForum, Classroom)
         }
