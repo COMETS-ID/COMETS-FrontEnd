@@ -1,6 +1,8 @@
 package com.mahardika.comets.di.module
 
 import com.mahardika.comets.data.remote.ApiService
+import com.mahardika.comets.data.remote.MoodRecognitionApiService
+import com.mahardika.comets.data.repository.MoodRecognitionRepository
 import com.mahardika.comets.data.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -35,8 +37,31 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
+    fun provideNewApiService(): MoodRecognitionApiService {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient
+            .Builder()
+            .addInterceptor(interceptor)
+            .build()
+        return Retrofit
+            .Builder()
+            .baseUrl("https://new-api.example.com")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MoodRecognitionApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMoodRecognitionRepository(apiService: MoodRecognitionApiService): MoodRecognitionRepository {
+        return MoodRecognitionRepository(apiService)
+    }
+
+    @Provides
     fun provideUserRepository(apiService: ApiService): UserRepository {
         return UserRepository(apiService)
     }
-
 }

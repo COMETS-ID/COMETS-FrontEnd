@@ -101,13 +101,13 @@ fun PsychologistItem(
                         text = psychologist.name,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.surface
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = psychologist.specialization ?: "",
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.surface
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
                 Spacer(modifier = Modifier.width(16.dp))

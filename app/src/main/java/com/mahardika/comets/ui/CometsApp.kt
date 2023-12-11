@@ -57,10 +57,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.mahardika.comets.AppDependencies
 import com.mahardika.comets.R
@@ -84,8 +86,7 @@ fun CometsApp(
     appDependencies: AppDependencies,
     shouldShowCamera: State<Boolean>,
     onShouldShowCameraChange: (Boolean) -> Unit,
-)
-{
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val currentScreen = when (currentRoute) {
@@ -104,7 +105,10 @@ fun CometsApp(
     var uri by remember {
         mutableStateOf(Uri.parse(""))
     }
-    Log.d("route", currentScreen?.route.toString())
+    Log.d(
+        "route",
+        currentScreen?.route.toString()
+    )
 
     Scaffold(
         topBar = {
@@ -112,27 +116,23 @@ fun CometsApp(
                 Surface(
                     shadowElevation = 4.dp
                 ) {
-                    CenterAlignedTopAppBar(
-                        title = {
-                            Text(
-                                text = currentScreen.title,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        },
+                    CenterAlignedTopAppBar(title = {
+                        Text(
+                            text = currentScreen.title,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    },
                         actions = {
-                            ProfileImageButton(
-                                modifier = Modifier.clickable {
-                                    navController.navigate(Screen.Profile.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            inclusive = true
-                                        }
-                                        restoreState = true
-                                        launchSingleTop = true
+                            ProfileImageButton(modifier = Modifier.clickable {
+                                navController.navigate(Screen.Profile.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        inclusive = true
                                     }
+                                    restoreState = true
+                                    launchSingleTop = true
                                 }
-                            )
-                        }
-                    )
+                            })
+                        })
                 }
             }
         },
@@ -180,8 +180,14 @@ fun CometsApp(
                     navController = navController
                 )
             }
-            composable(Screen.CameraResult.route) {
-                CameraResultScreen(uri = uri)
+            composable(
+                "${Screen.CameraResult.route}/{uri}",
+                arguments = listOf(navArgument("uri") {
+                    type = NavType.StringType
+                })
+            ) {
+                CameraResultScreen(navController = navController, uri = it.arguments?.getString
+                    ("uri") ?: "")
             }
             composable(Screen.Connect.route) {
                 ConnectScreen()
@@ -189,8 +195,11 @@ fun CometsApp(
             composable(Screen.Profile.route) {
                 ProfileScreen(navController = navController)
             }
-            navigation(route = Screen.Authentication.route, startDestination = Screen.Authentication.Onboarding.route){
-                composable(Screen.Authentication.Onboarding.route){
+            navigation(
+                route = Screen.Authentication.route,
+                startDestination = Screen.Authentication.Onboarding.route
+            ) {
+                composable(Screen.Authentication.Onboarding.route) {
                     OnboardingScreen(navController = navController)
                 }
                 composable(Screen.Authentication.Login.route) {
@@ -208,8 +217,7 @@ fun CometsApp(
 fun BottomBar(
     navController: NavHostController,
     currentRoute: String?,
-)
-{
+) {
     var selectedItem by remember { mutableIntStateOf(0) }
 
     BackHandler {
@@ -242,8 +250,7 @@ fun BottomBar(
         itemSize = navigationItems.size
     ) {
         navigationItems.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = currentRoute == item.screen.route,
+            NavigationBarItem(selected = currentRoute == item.screen.route,
                 onClick = {
                     navController.navigate(item.screen.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -276,8 +283,7 @@ fun BottomBar(
                 ),
                 label = {
                     Text(text = item.title)
-                }
-            )
+                })
         }
     }
 }
@@ -290,8 +296,8 @@ fun BottomNavigationBar(
     containerShape: Shape = RectangleShape,
     selectedItem: Int? = null,
     itemSize: Int? = null,
-    content: @Composable RowScope.() -> Unit
-){
+    content: @Composable RowScope.() -> Unit,
+) {
     Surface(
         modifier = modifier,
         color = containerColor,
@@ -310,28 +316,20 @@ fun BottomNavigationBar(
                         dampingRatio = 1f,
                         stiffness = Spring.StiffnessLow,
                     )
-                    val indicatorPosition: Dp by animateDpAsState(
-                        targetValue = (maxWidth / (itemSize.takeIf { it != 0 }
-                            ?: 1)) * selectedItem,
+                    val indicatorPosition: Dp by animateDpAsState(targetValue = (maxWidth / (itemSize.takeIf { it != 0 }
+                        ?: 1)) * selectedItem,
                         animationSpec = animationSpec,
-                        label = "indicator"
-                    )
+                        label = "indicator")
 
-                    Box(
-                        modifier = Modifier.width(maxWidth / (itemSize.takeIf { it != 0 } ?: 1))
-                    ) {
-                        Box (
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = 4.dp)
-                                .customWormTransition(indicatorPosition,
-                                    MaterialTheme.colorScheme.primary,
-                                    maxWidth / (itemSize.takeIf { it != 0 } ?: 1)
-                                )
-                                .size(
-                                    height = 4.dp,
-                                    width = maxWidth / (itemSize.takeIf { it != 0 } ?: 1))
-                        )
+                    Box(modifier = Modifier.width(maxWidth / (itemSize.takeIf { it != 0 } ?: 1))) {
+                        Box(modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 4.dp)
+                            .customWormTransition(indicatorPosition,
+                                MaterialTheme.colorScheme.primary,
+                                maxWidth / (itemSize.takeIf { it != 0 } ?: 1))
+                            .size(height = 4.dp,
+                                width = maxWidth / (itemSize.takeIf { it != 0 } ?: 1)))
                     }
                     Row(
                         modifier = Modifier
@@ -351,28 +349,37 @@ fun Modifier.customWormTransition(
     offset: Dp,
     indicatorColor: Color,
     itemWidth: Dp,
-) = composed {
-    drawWithContent {
-        val distance = itemWidth.roundToPx()
-        val scrollPosition = (offset.toPx().div(distance))
-        val wormOffset = (scrollPosition % 1) * 2
+) =
+    composed {
+        drawWithContent {
+            val distance = itemWidth.roundToPx()
+            val scrollPosition = (offset
+                .toPx()
+                .div(distance))
+            val wormOffset = (scrollPosition % 1) * 2
 
-        val xPos = scrollPosition.toInt() * distance
+            val xPos = scrollPosition.toInt() * distance
 
-        val head = xPos + distance * 0f.coerceAtLeast(wormOffset - 1)
-        val tail = xPos + size.width + distance * 1f.coerceAtMost(wormOffset)
+            val head = xPos + distance * 0f.coerceAtLeast(wormOffset - 1)
+            val tail = xPos + size.width + distance * 1f.coerceAtMost(wormOffset)
 
-        val adjustedHead = if (offset < 0.dp) head - distance else head
-        val adjustedTail = if (offset < 0.dp) tail - distance else tail
+            val adjustedHead = if (offset < 0.dp) head - distance else head
+            val adjustedTail = if (offset < 0.dp) tail - distance else tail
 
-        val worm = RoundRect(
-            adjustedHead, 0f, adjustedTail, size.height,
-            CornerRadius(50f)
-        )
+            val worm = RoundRect(
+                adjustedHead,
+                0f,
+                adjustedTail,
+                size.height,
+                CornerRadius(50f)
+            )
 
 
-        val path = Path().apply { addRoundRect(worm) }
-        drawPath(path = path, color = indicatorColor)
+            val path = Path().apply { addRoundRect(worm) }
+            drawPath(
+                path = path,
+                color = indicatorColor
+            )
+        }
     }
-}
 
