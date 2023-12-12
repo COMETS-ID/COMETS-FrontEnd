@@ -1,4 +1,4 @@
-package com.mahardika.comets.ui.commons
+package com.mahardika.comets.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

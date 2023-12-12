@@ -1,4 +1,4 @@
-package com.mahardika.comets.ui.commons
+package com.mahardika.comets.ui.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box

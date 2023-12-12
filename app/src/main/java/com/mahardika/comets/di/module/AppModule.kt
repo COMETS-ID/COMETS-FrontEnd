@@ -4,6 +4,7 @@ import com.mahardika.comets.data.remote.ApiService
 import com.mahardika.comets.data.remote.MoodRecognitionApiService
 import com.mahardika.comets.data.repository.MoodRecognitionRepository
 import com.mahardika.comets.data.repository.UserRepository
+import com.mahardika.comets.ui.viewmodels.camera.CameraViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,5 +64,13 @@ object AppModule {
     @Provides
     fun provideUserRepository(apiService: ApiService): UserRepository {
         return UserRepository(apiService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCameraViewModel(
+        moodRecognitionRepository: MoodRecognitionRepository
+    ): CameraViewModel {
+        return CameraViewModel(moodRecognitionRepository)
     }
 }

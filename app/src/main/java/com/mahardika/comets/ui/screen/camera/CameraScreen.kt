@@ -31,7 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -45,9 +45,11 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mahardika.comets.AppDependencies
 import com.mahardika.comets.ui.navigation.Screen
+import com.mahardika.comets.ui.viewmodels.camera.CameraViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -60,20 +62,15 @@ import kotlin.coroutines.suspendCoroutine
 
 @Composable
 fun CameraScreen(
-    modifier: Modifier = Modifier,
     appDependencies: AppDependencies,
-    shouldShowCamera: State<Boolean>,
-    onShouldShowCameraChange: (Boolean) -> Unit,
-    onSetUri: (Uri) -> Unit,
     navController: NavHostController,
+    viewModel: CameraViewModel = hiltViewModel(),
 ) {
-//    var shouldShowPhoto by remember {
-//        mutableStateOf(false)
-//    }
+    val cameraUiState by viewModel.uiState.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
 
-    if (shouldShowCamera.value) {
+    if (cameraUiState.cameraAllowed) {
         CameraView(
             outputDirectory = appDependencies.outputDirectory,
             executor = appDependencies.cameraExecutor,
@@ -84,7 +81,6 @@ fun CameraScreen(
                 coroutineScope.launch(Dispatchers.Main) {
                     navController.navigate(Screen.CameraResult.route + "/$encodedUrl")
                 }
-                onSetUri(it)
             },
             onError = {
                 Log.e(
@@ -95,14 +91,6 @@ fun CameraScreen(
             },
             navController = navController
         )
-//    } else if (shouldShowPhoto) {
-//        navController.navigate(Screen.CameraResult.route) {
-//            popUpTo(navController.graph.findStartDestination().id) {
-//                saveState = true
-//            }
-//            restoreState = true
-//            launchSingleTop = true
-//        }
     } else {
         Text(text = "Need camera permission")
     }

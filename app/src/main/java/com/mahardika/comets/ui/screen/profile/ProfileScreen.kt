@@ -7,7 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.mahardika.comets.ui.commons.PrimaryButton
+import com.mahardika.comets.ui.components.PrimaryButton
 import com.mahardika.comets.ui.navigation.Screen
 
 @Composable

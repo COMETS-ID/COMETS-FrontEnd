@@ -43,8 +43,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.mahardika.comets.ui.commons.ArticleItemContent
-import com.mahardika.comets.ui.commons.ProfileImageButton
-import com.mahardika.comets.ui.commons.SectionTitle
+import com.mahardika.comets.ui.components.ProfileImageButton
+import com.mahardika.comets.ui.components.SectionTitle
 import com.mahardika.comets.ui.navigation.Screen
 import com.mahardika.comets.ui.screen.home.components.ArticleItem
 import com.mahardika.comets.ui.screen.home.components.MoodItem
