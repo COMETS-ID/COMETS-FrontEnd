@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. Smith",
+    "specialization": "Clinical Psychologist",
+    "tariff": "IDR 2,250,000",
+    "description": "Dr. Smith is a highly experienced clinical psychologist with a focus on evidence-based therapies to help individuals cope with various mental health issues."
+  },
+  {
+    "id": 2,
+    "name": "Dr. Johnson",
+    "specialization": "Counseling Psychologist",
+    "tariff": "IDR 1,800,000",
+    "description": "Dr. Johnson specializes in counseling psychology, providing support and guidance to individuals facing challenges in their personal and professional lives."
+  },
+  {
+    "id": 3,
+    "name": "Dr. Davis",
+    "specialization": "Child Psychologist",
+    "tariff": "IDR 2,700,000",
+    "description": "Dr. Davis is a child psychologist dedicated to helping children and their families navigate through developmental and behavioral issues with a compassionate and child-friendly approach."
+  },
+  {
+    "id": 4,
+    "name": "Dr. Garcia",
+    "specialization": "Sports Psychologist",
+    "tariff": "IDR 3,000,000",
+    "description": "Dr. Garcia specializes in sports psychology, assisting athletes in enhancing their mental resilience, focus, and overall performance for success in their respective sports."
+  },
+  {
+    "id": 5,
+    "name": "Dr. White",
+    "specialization": "Forensic Psychologist",
+    "tariff": "IDR 2,550,000",
+    "description": "Dr. White, a forensic psychologist, applies psychological principles to legal and criminal matters, providing expert analysis and testimony in court cases."
+  },
+  {
+    "id": 6,
+    "name": "Dr. Martinez",
+    "specialization": "Educational Psychologist",
+    "tariff": "IDR 2,400,000",
+    "description": "Dr. Martinez focuses on educational psychology, working with students, teachers, and educational institutions to enhance learning environments and support academic success."
+  },
+  {
+    "id": 7,
+    "name": "Dr. Brown",
+    "specialization": "Health Psychologist",
+    "tariff": "IDR 2,850,000",
+    "description": "Dr. Brown specializes in health psychology, promoting holistic well-being and addressing the psychological aspects of physical health conditions."
+  },
+  {
+    "id": 8,
+    "name": "Dr. Taylor",
+    "specialization": "Geriatric Psychologist",
+    "tariff": "IDR 2,625,000",
+    "description": "Dr. Taylor is a geriatric psychologist, providing support and mental health services tailored to the unique needs of older adults."
+  },
+  {
+    "id": 9,
+    "name": "Dr. Adams",
+    "specialization": "Industrial-Organizational Psychologist",
+    "tariff": "IDR 3,150,000",
+    "description": "Dr. Adams specializes in industrial-organizational psychology, applying psychological principles to enhance workplace dynamics, employee well-being, and organizational effectiveness."
+  },
+  {
+    "id": 10,
+    "name": "Dr. Walker",
+    "specialization": "Neuropsychologist",
+    "tariff": "IDR 3,300,000",
+    "description": "Dr. Walker is a neuropsychologist, specializing in the study of brain-behavior relationships and providing assessments and interventions for individuals with neurological conditions."
+  }
+]

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -19,13 +20,13 @@ import androidx.compose.ui.unit.sp
 fun PrimaryButton(
     modifier: Modifier = Modifier,
     text: String,
-    fontSize: Int = 20,
+    fontSize: Int = 16,
     fontWeight: FontWeight = FontWeight.Medium,
     shouldFillMaxWidth: Boolean = true,
-    onClick: () -> Unit
+    padding: Dp = 16.dp,
+    onClick: () -> Unit,
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
+    Surface(color = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(32.dp),
         modifier = if (shouldFillMaxWidth) {
             modifier
@@ -37,12 +38,13 @@ fun PrimaryButton(
             modifier.clickable {
                 onClick()
             }
-        }
-    ) {
+        }) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)
-        ){
+            modifier = Modifier.padding(
+                padding
+            )
+        ) {
             Text(
                 text = text,
                 fontSize = fontSize.sp,

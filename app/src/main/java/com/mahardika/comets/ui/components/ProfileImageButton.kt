@@ -18,7 +18,7 @@ import coil.request.ImageRequest
 
 @Composable
 fun ProfileImageButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
@@ -33,7 +33,8 @@ fun ProfileImageButton(
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
+            model = ImageRequest
+                .Builder(LocalContext.current)
                 .data("https://source.unsplash.com/random?person")
                 .crossfade(true)
                 .build(),

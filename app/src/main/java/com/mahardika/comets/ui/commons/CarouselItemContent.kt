@@ -7,5 +7,5 @@ data class CarouselItemContent(
     val title: String,
     val description: String,
     val cta: @Composable () -> Unit = {},
-    val imageBitmap: ImageBitmap? = null
+    val imageBitmap: ImageBitmap? = null,
 )

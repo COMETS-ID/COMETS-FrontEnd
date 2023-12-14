@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SectionTitle(
     modifier: Modifier = Modifier,
-    text: String
+    text: String,
 ) {
     Text(
         text = text,

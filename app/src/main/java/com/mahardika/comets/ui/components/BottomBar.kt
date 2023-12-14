@@ -91,7 +91,7 @@ fun BottomBar(
                     unselectedIconColor = MaterialTheme.colorScheme.onSurface
                 ),
                 label = {
-                    Text(text = item.title)
+                    Text(text = item.title, style = MaterialTheme.typography.labelSmall)
                 })
         }
     }

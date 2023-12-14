@@ -23,9 +23,8 @@ import com.mahardika.comets.ui.commons.CarouselItemContent
 
 @Composable
 fun CarouselItem(
-    item: CarouselItemContent
-)
-{
+    item: CarouselItemContent,
+) {
     Surface(
         modifier = Modifier
             .fillMaxSize()

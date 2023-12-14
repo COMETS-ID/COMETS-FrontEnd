@@ -1,6 +1,8 @@
 package com.mahardika.comets.ui.screen.pyschologist
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -17,6 +21,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,69 +31,61 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.mahardika.comets.ui.commons.PsychologistItemContent
+import com.mahardika.comets.data.response.PsychologistResponseItem
+import com.mahardika.comets.ui.navigation.Screen
 
 @Composable
-fun PsychologistScreen(){
-    val psychologistList = listOf(
-        PsychologistItemContent(
-            name = "Dr. Smith",
-            specialization = "Clinical Psychologist",
-            tariff = "Rp 80,000",
-            image = null
-        ),
-        PsychologistItemContent(
-            name = "Dr. Johnson",
-            specialization = "Counseling Psychologist",
-            tariff = "Rp 60,000",
-            image = null
-        ),
-        PsychologistItemContent(
-            name = "Dr. Williams",
-            specialization = "Child Psychologist",
-            tariff = "Rp 90,000",
-            image = null
-        ),
-        PsychologistItemContent(
-            name = "Dr. Davis",
-            specialization = "Sports Psychologist",
-            tariff = "Rp 70,000",
-            image = null
-        ),
-        PsychologistItemContent(
-            name = "Dr. Brown",
-            specialization = "Educational Psychologist",
-            tariff = "Rp 50,000",
-            image = null
-        )
+fun PsychologistScreen(
+    navController: NavHostController,
+    viewModel: PsychologistViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.getPsychologistsFromLocal(context)
+    }
+
+    Log.d(
+        "psychologist",
+        uiState.psychologists.toString()
     )
-    Column(
+    LazyColumn(
         modifier = Modifier.fillMaxWidth()
     ) {
-        psychologistList.forEach { psychologist ->
-            PsychologistItem(psychologist = psychologist)
+        items(uiState.psychologists) {
+            PsychologistItem(psychologist = it) {
+                navController.navigate("${Screen.Connect.PsychologistDetail.route}/${it.id}"){
+                    popUpTo(navController.graph.findStartDestination().id){
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
 fun PsychologistItem(
-    psychologist: PsychologistItemContent
+    psychologist: PsychologistResponseItem,
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-        ,
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Row(
                 modifier = Modifier
@@ -123,16 +122,6 @@ fun PsychologistItem(
                         .clip(CircleShape)
                         .size(64.dp)
                 )
-//                psychologist.image?.let {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .size(64.dp)
-//                            .clip(RoundedCornerShape(8.dp)),
-//                        contentScale = ContentScale.Crop
-//                    )
-//                }
             }
             Text(
                 text = psychologist.tariff,

@@ -75,9 +75,14 @@ fun CameraScreen(
             outputDirectory = appDependencies.outputDirectory,
             executor = appDependencies.cameraExecutor,
             onImageCaptured = {
-                Log.d("uri", Screen.CameraResult.route + it.toString())
-                val encodedUrl = URLEncoder.encode(it.toString(),
-                    "utf-8")
+                Log.d(
+                    "uri",
+                    Screen.CameraResult.route + it.toString()
+                )
+                val encodedUrl = URLEncoder.encode(
+                    it.toString(),
+                    "utf-8"
+                )
                 coroutineScope.launch(Dispatchers.Main) {
                     navController.navigate(Screen.CameraResult.route + "/$encodedUrl")
                 }

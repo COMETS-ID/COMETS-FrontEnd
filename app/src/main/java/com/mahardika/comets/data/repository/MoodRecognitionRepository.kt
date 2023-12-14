@@ -13,7 +13,7 @@ class MoodRecognitionRepository @Inject constructor(
     private val apiService: MoodRecognitionApiService,
 ) {
 
-    suspend fun postFaceCapture(image: MultipartBody.Part) : Flow<Resource<FaceRecognitionPostResponse>> {
+    suspend fun postFaceCapture(image: MultipartBody.Part): Flow<Resource<FaceRecognitionPostResponse>> {
         return flow {
             try {
                 emit(Resource.Loading(true))
@@ -23,12 +23,10 @@ class MoodRecognitionRepository @Inject constructor(
 
                 emit(Resource.Success(data = uploadImageResponse))
                 emit(Resource.Loading(false))
-            }
-            catch (e: IOException) {
+            } catch (e: IOException) {
                 emit(Resource.Error(message = "Couldn't upload image."))
-            }
-            catch (e: HttpException) {
-                emit(Resource.Error(message = "${ e.message}"))
+            } catch (e: HttpException) {
+                emit(Resource.Error(message = "${e.message}"))
             }
         }
     }

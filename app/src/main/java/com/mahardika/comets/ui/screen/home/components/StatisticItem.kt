@@ -13,18 +13,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun StatisticItem(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-)
-{
+    content: @Composable () -> Unit,
+) {
     Surface(
         shadowElevation = 4.dp,
         color = MaterialTheme.colorScheme.primaryContainer,
-        modifier = modifier
-            .clip(RoundedCornerShape(32.dp))
+        modifier = modifier.clip(RoundedCornerShape(32.dp))
     ) {
         Box(
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             content()
         }

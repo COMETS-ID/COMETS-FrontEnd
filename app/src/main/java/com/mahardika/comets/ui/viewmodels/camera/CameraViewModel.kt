@@ -76,9 +76,12 @@ class CameraViewModel @Inject constructor(
                 }
         }
     }
+
     fun updatePermissionState(permissionGranted: Boolean) {
-        _uiState.update { CameraUiState(
-            cameraAllowed = permissionGranted
-        ) }
+        _uiState.update {
+            CameraUiState(
+                cameraAllowed = permissionGranted
+            )
+        }
     }
 }

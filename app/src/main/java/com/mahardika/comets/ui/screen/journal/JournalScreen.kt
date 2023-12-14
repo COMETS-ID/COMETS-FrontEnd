@@ -2,14 +2,10 @@ package com.mahardika.comets.ui.screen.journal
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,10 +16,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mahardika.comets.ui.screen.home.MoodSection
 
 @Composable
-fun JournalScreen()
-{
+fun JournalScreen() {
     val scrollState = rememberScrollState()
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
@@ -36,59 +32,12 @@ fun JournalScreen()
 }
 
 @Composable
-fun MoodSection(
-)
-{
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            text = "5-day mood history",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-
-        }
-    }
-}
-
-@Composable
 fun MoodItem(
     modifier: Modifier = Modifier,
     mood: String,
     day: String,
-    icon: ImageVector
-)
-{
+    icon: ImageVector,
+) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

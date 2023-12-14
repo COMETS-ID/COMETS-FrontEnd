@@ -10,5 +10,5 @@ interface MoodRecognitionApiService {
 
     @Multipart
     @POST
-    fun postFaceCapture(@Part image: MultipartBody.Part) : FaceRecognitionPostResponse
- }
+    fun postFaceCapture(@Part image: MultipartBody.Part): FaceRecognitionPostResponse
+}

@@ -6,5 +6,5 @@ data class NavigationItem(
     val title: String,
     val icon: ImageVector,
     val selectedIcon: ImageVector? = null,
-    val screen: Screen
+    val screen: Screen,
 )

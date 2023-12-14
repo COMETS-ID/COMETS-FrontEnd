@@ -1,7 +1,6 @@
 package com.mahardika.comets.ui
 
-import android.net.Uri
-import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.clickable
@@ -13,11 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,6 +37,8 @@ import com.mahardika.comets.ui.screen.journal.JournalScreen
 import com.mahardika.comets.ui.screen.login.LoginScreen
 import com.mahardika.comets.ui.screen.onboarding.OnboardingScreen
 import com.mahardika.comets.ui.screen.profile.ProfileScreen
+import com.mahardika.comets.ui.screen.questionnaire.QuestionnaireScreen
+import com.mahardika.comets.ui.screen.questionnaire_result.QuestionnaireResultScreen
 import com.mahardika.comets.ui.screen.signup.SignupScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,8 +46,6 @@ import com.mahardika.comets.ui.screen.signup.SignupScreen
 fun CometsApp(
     navController: NavHostController = rememberNavController(),
     appDependencies: AppDependencies,
-    shouldShowCamera: State<Boolean>,
-    onShouldShowCameraChange: (Boolean) -> Unit,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -63,17 +58,20 @@ fun CometsApp(
         Screen.Connect.Psychologist.route -> Screen.Connect.Psychologist
         Screen.Connect.CommunityForum.route -> Screen.Connect.CommunityForum
         Screen.Connect.Classroom.route -> Screen.Connect.Classroom
+        Screen.Connect.PsychologistDetail.route -> Screen.Connect.PsychologistDetail
         Screen.Profile.route -> Screen.Profile
+        Screen.Questionnaire.route -> Screen.Questionnaire
+        Screen.QuestionnaireResult.route + "/{score}" -> Screen.QuestionnaireResult
         else -> null
     }
 
-    var uri by remember {
-        mutableStateOf(Uri.parse(""))
+    BackHandler {
+        navController.navigate(Screen.Home.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
+            }
+        }
     }
-    Log.d(
-        "route",
-        currentScreen?.route.toString()
-    )
 
     Scaffold(
         topBar = {
@@ -170,6 +168,15 @@ fun CometsApp(
                 composable(Screen.Authentication.Signup.route) {
                     SignupScreen(navController)
                 }
+            }
+            composable(Screen.Questionnaire.route) {
+                QuestionnaireScreen(navController)
+            }
+            composable("${Screen.QuestionnaireResult.route}/{score}", arguments = listOf
+                (navArgument("score"){
+                    type = NavType.IntType
+            })) {
+                QuestionnaireResultScreen(score = it.arguments?.getInt("score") ?: 0)
             }
         }
     }

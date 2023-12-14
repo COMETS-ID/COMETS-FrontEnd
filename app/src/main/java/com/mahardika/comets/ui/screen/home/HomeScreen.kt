@@ -18,13 +18,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,23 +32,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.mahardika.comets.ui.commons.ArticleItemContent
+import com.mahardika.comets.ui.commons.MoodItemContent
 import com.mahardika.comets.ui.components.ProfileImageButton
-import com.mahardika.comets.ui.components.SectionTitle
 import com.mahardika.comets.ui.navigation.Screen
 import com.mahardika.comets.ui.screen.home.components.ArticleItem
 import com.mahardika.comets.ui.screen.home.components.MoodItem
-import com.mahardika.comets.ui.screen.home.components.MoodSelectorItem
 import com.mahardika.comets.utils.Mood
 
 @Composable
@@ -56,9 +51,6 @@ fun HomeScreen(
     navController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val homeUiState by viewModel.uiState.collectAsState()
-    val todayMoods = viewModel.userTodayMoods
-
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -78,11 +70,7 @@ fun HomeScreen(
                 }
             },
             navController = navController,
-            todayMoods = todayMoods,
-            todayMood = homeUiState.todayMood,
-            setTodayMood = {
-                viewModel.setUserMood(it)
-            })
+        )
         BottomSection(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,9 +114,6 @@ fun HomeScreen(
 fun TopSection(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    todayMoods: List<Mood>,
-    todayMood: Mood?,
-    setTodayMood: (Mood) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -139,7 +124,7 @@ fun TopSection(
         Column {
             Text(
                 text = "Good Morning,",
-                fontWeight = FontWeight.Light,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Row(
@@ -149,8 +134,7 @@ fun TopSection(
             ) {
                 Text(
                     text = "Eren Yeager",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Row(
@@ -174,29 +158,6 @@ fun TopSection(
                 }
             }
         }
-        Column {
-            Text(
-                text = "How are you today?",
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                todayMoods.forEach {
-                    MoodSelectorItem(
-                        selectedIcon = ImageVector.vectorResource(id = it.moodSelectedIcon),
-                        unselectedIcon = ImageVector.vectorResource(id = it.moodUnselectedIcon),
-                        mood = it.moodName,
-                        isSelected = todayMood == it,
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { setTodayMood(it) })
-                }
-            }
-        }
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
@@ -207,6 +168,8 @@ fun BottomSection(modifier: Modifier = Modifier) {
         modifier = modifier.background(MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Spacer(modifier = Modifier.height(64.dp))
+        StatisticSection()
+        Spacer(modifier = Modifier.height(32.dp))
         MoodSection(modifier = Modifier.padding(horizontal = 24.dp))
         Spacer(modifier = Modifier.height(32.dp))
         ArticleSection()
@@ -225,11 +188,52 @@ fun MenuSection(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Check your mood now")
+            Text(text = "Check your mood now", style = MaterialTheme.typography.labelLarge)
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = null
             )
+        }
+    }
+}
+
+@Composable
+fun StatisticSection(
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.padding(horizontal = 24.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8
+            .dp)) {
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                ),
+                modifier = Modifier.weight(1f)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(text = "Today's Mood Score", style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "34/50", style = MaterialTheme.typography.titleLarge)
+                }
+            }
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary
+                ),
+                modifier = Modifier.weight(1f)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(text = "Today's Mood", style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Happy", style = MaterialTheme.typography.titleLarge)
+                }
+            }
         }
     }
 }
@@ -242,36 +246,36 @@ fun MoodSection(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        SectionTitle(text = "5-day mood history")
+        val moodItems = listOf(
+            MoodItemContent(
+                mood = Mood.HAPPY,
+                day = "Monday"
+            ),
+            MoodItemContent(
+                mood = Mood.SAD,
+                day = "Tuesday"
+            ),
+            MoodItemContent(
+                mood = Mood.ANGER,
+                day = "Wednesday"
+            ),
+            MoodItemContent(
+                mood = Mood.HAPPY,
+                day = "Thursday"
+            ),
+            MoodItemContent(
+                mood = Mood.NEUTRAL,
+                day = "Friday"
+            ),
+        )
+        Text(text = "5-day mood history", style = MaterialTheme.typography.titleLarge)
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
-            MoodItem(
-                mood = "Happy",
-                day = "Mon",
-                icon = Icons.Default.Person
-            )
+            moodItems.forEach {
+                MoodItem(item = it)
+            }
         }
     }
 }
@@ -298,10 +302,8 @@ fun ArticleSection() {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        SectionTitle(
-            text = "Articles for you",
-            modifier = Modifier.padding(start = 24.dp)
-        )
+        Text(text = "Articles for you", style = MaterialTheme.typography.titleLarge, modifier =
+        Modifier.padding(horizontal = 24.dp))
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()

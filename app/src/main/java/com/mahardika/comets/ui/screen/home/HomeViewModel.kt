@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel(){
+class HomeViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -25,6 +25,7 @@ class HomeViewModel @Inject constructor(private val userRepository: UserReposito
         Mood.ANGER,
         Mood.FEARFUL
     )
+
     fun getUserData() {
         viewModelScope.launch {
             userRepository.getUser()
@@ -32,8 +33,10 @@ class HomeViewModel @Inject constructor(private val userRepository: UserReposito
     }
 
     fun setUserMood(mood: Mood) {
-        _uiState.update { HomeUiState(
-            todayMood = mood
-        ) }
+        _uiState.update {
+            HomeUiState(
+                todayMood = mood
+            )
+        }
     }
 }

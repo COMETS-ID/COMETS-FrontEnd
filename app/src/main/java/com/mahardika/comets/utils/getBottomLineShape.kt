@@ -5,8 +5,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun getBottomLineShape(lineThicknessDp: Dp): Shape
-{
+fun getBottomLineShape(lineThicknessDp: Dp): Shape {
     val lineThicknessPx = with(LocalDensity.current) { lineThicknessDp.toPx() }
     return GenericShape { size, _ ->
         moveTo(

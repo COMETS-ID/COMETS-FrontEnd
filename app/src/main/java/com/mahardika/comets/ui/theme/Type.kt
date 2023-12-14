@@ -1,13 +1,14 @@
 package com.mahardika.comets.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.mahardika.comets.R
 
-object AppFont
-{
+object AppFont {
     val Poppins = FontFamily(
         Font(
             R.font.poppins_light,
@@ -29,25 +30,85 @@ object AppFont
     )
 }
 
-private val defaultTypography = Typography()
 val Typography = Typography(
-    displayLarge = defaultTypography.displayLarge.copy(fontFamily = AppFont.Poppins),
-    displayMedium = defaultTypography.displayMedium.copy(fontFamily = AppFont.Poppins),
-    displaySmall = defaultTypography.displaySmall.copy(fontFamily = AppFont.Poppins),
+    displayLarge = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Bold,
+        fontSize = 30.sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Medium, // Change to FontWeight.SemiBold if needed
+        fontSize = 24.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Light, // Change to FontWeight.Medium or FontWeight.SemiBold if needed
+        fontSize = 18.sp
+    ),
 
-    headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = AppFont.Poppins),
-    headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = AppFont.Poppins),
-    headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = AppFont.Poppins),
+    headlineLarge = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Medium, // Change to FontWeight.SemiBold if needed
+        fontSize = 20.sp
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Light, // Change to FontWeight.Medium or FontWeight.SemiBold if needed
+        fontSize = 16.sp
+    ),
 
-    titleLarge = defaultTypography.titleLarge.copy(fontFamily = AppFont.Poppins),
-    titleMedium = defaultTypography.titleMedium.copy(fontFamily = AppFont.Poppins),
-    titleSmall = defaultTypography.titleSmall.copy(fontFamily = AppFont.Poppins),
+    titleLarge = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 20.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Medium, // Change to FontWeight.SemiBold if needed
+        fontSize = 18.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Light, // Change to FontWeight.Medium or FontWeight.SemiBold if needed
+        fontSize = 16.sp
+    ),
 
-    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = AppFont.Poppins),
-    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = AppFont.Poppins),
-    bodySmall = defaultTypography.bodySmall.copy(fontFamily = AppFont.Poppins),
+    bodyLarge = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Light,
+        fontSize = 14.sp
+    ),
 
-    labelLarge = defaultTypography.labelLarge.copy(fontFamily = AppFont.Poppins),
-    labelMedium = defaultTypography.labelMedium.copy(fontFamily = AppFont.Poppins),
-    labelSmall = defaultTypography.labelSmall.copy(fontFamily = AppFont.Poppins)
+    labelLarge = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = AppFont.Poppins,
+        fontWeight = FontWeight.Light,
+        fontSize = 12.sp
+    )
 )
+

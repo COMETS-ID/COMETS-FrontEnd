@@ -24,48 +24,63 @@ import com.mahardika.comets.ui.navigation.Screen
 
 @Composable
 fun OnboardingScreen(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .padding(32.dp)
     ) {
-        Text(
-            text = "Comets",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Track Your Mood Now"
-        )
-        Spacer(modifier = Modifier.height(96.dp))
-        Image(
-            painter = painterResource(id = R.drawable.onboarding_img),
-            contentDescription = null,
-            modifier = Modifier.size(250.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Let's get you in!",
-            fontWeight = FontWeight.Medium,
-        )
-        Spacer(modifier = Modifier.height(132.dp))
-        PrimaryButton(text = "Login") {
-            navController.navigate(Screen.Authentication.Login.route){
-                popUpTo(navController.graph.findStartDestination().id){
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-            }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Comets",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Track Your Mood Now"
+            )
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        PrimaryButton(text = "Signup") {
-            
+        Column(
+            modifier = Modifier.weight(2f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.onboarding_img),
+                contentDescription = null,
+                modifier = Modifier.size(250.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Let's get you in!",
+                fontWeight = FontWeight.Medium,
+            )
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            PrimaryButton(text = "Login") {
+                navController.navigate(Screen.Authentication.Login.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            PrimaryButton(text = "Signup") {
+                navController.navigate(Screen.Authentication.Signup.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         }
     }
 }

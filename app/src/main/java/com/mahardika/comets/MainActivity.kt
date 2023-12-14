@@ -25,8 +25,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity()
-{
+class MainActivity : ComponentActivity() {
     private val appDependencies by lazy {
         AppDependencies(
             outputDirectory = getOutputDirectory(),
@@ -35,10 +34,9 @@ class MainActivity : ComponentActivity()
     }
     private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
 
-    val cameraViewModel: CameraViewModel by viewModels()
+    private val cameraViewModel: CameraViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             CometsTheme {
@@ -46,20 +44,13 @@ class MainActivity : ComponentActivity()
                     color = MaterialTheme.colorScheme.background
                 ) {
                     requestCameraPermission()
-                    CometsApp(
-                        appDependencies = appDependencies,
-                        shouldShowCamera = shouldShowCamera,
-                        onShouldShowCameraChange = { newState ->
-                            shouldShowCamera.value = newState
-                        }
-                    )
+                    CometsApp(appDependencies = appDependencies)
                 }
             }
         }
     }
 
-    override fun onDestroy()
-    {
+    override fun onDestroy() {
         super.onDestroy()
         appDependencies.cameraExecutor.shutdown()
     }
@@ -68,9 +59,15 @@ class MainActivity : ComponentActivity()
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            showToast(applicationContext, "Camera permission granted")
+            showToast(
+                applicationContext,
+                "Camera permission granted"
+            )
         } else {
-            showToast(applicationContext, "Camera permission denied. Some features will be unavailable")
+            showToast(
+                applicationContext,
+                "Camera permission denied. Some features will be unavailable"
+            )
         }
     }
 
@@ -80,25 +77,39 @@ class MainActivity : ComponentActivity()
                 this,
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                Log.d("camera allowed", cameraViewModel.uiState.value.cameraAllowed.toString())
+                Log.d(
+                    "camera allowed",
+                    cameraViewModel.uiState.value.cameraAllowed.toString()
+                )
                 shouldShowCamera.value = true
                 cameraViewModel.updatePermissionState(true)
-                Log.d("camera allowed", cameraViewModel.uiState.value.cameraAllowed.toString())
+                Log.d(
+                    "camera allowed",
+                    cameraViewModel.uiState.value.cameraAllowed.toString()
+                )
             }
 
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.CAMERA
-            ) -> showToast(applicationContext, "Camera permission is required to access important feature")
+            ) -> showToast(
+                applicationContext,
+                "Camera permission is required to access important feature"
+            )
 
             else -> requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
     private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
+        val mediaDir = externalMediaDirs
+            .firstOrNull()
+            ?.let {
+                File(
+                    it,
+                    resources.getString(R.string.app_name)
+                ).apply { mkdirs() }
+            }
 
         return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
     }
@@ -106,7 +117,7 @@ class MainActivity : ComponentActivity()
 
 class AppDependencies @Inject constructor(
     val outputDirectory: File,
-    val cameraExecutor: ExecutorService
+    val cameraExecutor: ExecutorService,
 )
 
 

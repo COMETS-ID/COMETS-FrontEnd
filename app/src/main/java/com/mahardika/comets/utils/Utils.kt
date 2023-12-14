@@ -12,28 +12,53 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 object Utils {
-    fun createMultipartBody(uri: Uri, multipartName: String): MultipartBody.Part {
+    fun createMultipartBody(
+        uri: Uri,
+        multipartName: String,
+    ): MultipartBody.Part {
         val documentImage = decodeFile(uri.path!!)
         val file = File(uri.path!!)
         val os: OutputStream = BufferedOutputStream(FileOutputStream(file))
-        documentImage.compress(Bitmap.CompressFormat.JPEG, 100, os)
+        documentImage.compress(
+            Bitmap.CompressFormat.JPEG,
+            100,
+            os
+        )
         os.close()
         val requestBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData(name = multipartName, file.name, requestBody)
+        return MultipartBody.Part.createFormData(
+            name = multipartName,
+            file.name,
+            requestBody
+        )
     }
 
     private fun decodeFile(filePath: String): Bitmap {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
-        BitmapFactory.decodeFile(filePath, options)
+        BitmapFactory.decodeFile(
+            filePath,
+            options
+        )
 
-        options.inSampleSize = calculateInSampleSize(options, 512, 512)
+        options.inSampleSize = calculateInSampleSize(
+            options,
+            512,
+            512
+        )
 
         options.inJustDecodeBounds = false
-        return BitmapFactory.decodeFile(filePath, options)
+        return BitmapFactory.decodeFile(
+            filePath,
+            options
+        )
     }
 
-    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int,
+    ): Int {
         val height = options.outHeight
         val width = options.outWidth
         var inSampleSize = 1

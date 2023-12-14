@@ -1,6 +1,6 @@
 package com.mahardika.comets.di.module
 
-import com.mahardika.comets.data.remote.ApiService
+import com.mahardika.comets.data.remote.GeneralApiService
 import com.mahardika.comets.data.remote.MoodRecognitionApiService
 import com.mahardika.comets.data.repository.MoodRecognitionRepository
 import com.mahardika.comets.data.repository.UserRepository
@@ -21,7 +21,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApiService(): ApiService {
+    fun provideApiService(): GeneralApiService {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient
@@ -34,7 +34,7 @@ object AppModule {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiService::class.java)
+            .create(GeneralApiService::class.java)
     }
 
     @Provides
@@ -62,14 +62,14 @@ object AppModule {
     }
 
     @Provides
-    fun provideUserRepository(apiService: ApiService): UserRepository {
-        return UserRepository(apiService)
+    fun provideUserRepository(generalApiService: GeneralApiService): UserRepository {
+        return UserRepository(generalApiService)
     }
 
     @Singleton
     @Provides
     fun provideCameraViewModel(
-        moodRecognitionRepository: MoodRecognitionRepository
+        moodRecognitionRepository: MoodRecognitionRepository,
     ): CameraViewModel {
         return CameraViewModel(moodRecognitionRepository)
     }
