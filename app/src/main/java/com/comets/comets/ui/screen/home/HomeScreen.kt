@@ -3,7 +3,7 @@ package com.comets.comets.ui.screen.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,15 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -80,68 +77,110 @@ fun HomeScreen(
             moodFormAssessment?.let { moodFormList.add(it) }
         }
     }
-    Column {
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primary)
-        ) {
-            var topHeight by remember { mutableStateOf(0.dp) }
-            val maxHeight = this.maxHeight
-            val density = LocalDensity.current
-            val remainingHeight = maxHeight - topHeight
-
-            TopSection(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter)
-                    .onGloballyPositioned {
-                        topHeight = with(density) {
-                            it.size.height.toDp()
-                        }
-                    },
-                navController = navController,
-            )
-            BottomSection(
-                moodsImage = moodImageList.take(5),
-                moodsForm = moodFormList.take(5),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(remainingHeight)
-                    .align(Alignment.BottomCenter)
-                    .clip(
-                        RoundedCornerShape(
-                            24.dp,
-                            24.dp,
-                            0.dp,
-                            0.dp
-                        )
-                    ),
-            )
-
-            val centerHeight = 56.dp
-            val centerBottomPadding = remainingHeight - centerHeight / 2
-
-            MenuSection(modifier = Modifier
-                .padding(
-                    bottom = centerBottomPadding,
-                    start = 32.dp,
-                    end = 32.dp
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary)
+    ) {
+        item {
+            TopSection(navController = navController)
+        }
+        item {
+            Box {
+                BottomSection(
+                    moodsImage = moodImageList.take(5),
+                    moodsForm = moodFormList.take(5),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(
+                            RoundedCornerShape(
+                                24.dp,
+                                24.dp,
+                                0.dp,
+                                0.dp
+                            )
+                        ),
                 )
-                .fillMaxWidth()
-                .height(centerHeight)
-                .align(Alignment.BottomCenter)
-                .clickable {
-                    navController.navigate("${Screen.ApplicationContent.Camera.route}/no-uuid") {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                MenuSection(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .padding(horizontal = 32.dp)
+                    .align(Alignment.TopCenter)
+                    .offset(y = (-32).dp)
+                    .clickable {
+                        navController.navigate("${Screen.ApplicationContent.Camera.route}/no-uuid") {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            restoreState = true
+                            launchSingleTop = true
                         }
-                        restoreState = true
-                        launchSingleTop = true
-                    }
-                })
+                    })
+            }
         }
     }
+//    Column {
+//        BoxWithConstraints(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(MaterialTheme.colorScheme.primary)
+//        ) {
+//            var topHeight by remember { mutableStateOf(0.dp) }
+//            val maxHeight = this.maxHeight
+//            val density = LocalDensity.current
+//            val remainingHeight = maxHeight - topHeight
+//
+//            TopSection(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .align(Alignment.TopCenter)
+//                    .onGloballyPositioned {
+//                        topHeight = with(density) {
+//                            it.size.height.toDp()
+//                        }
+//                    },
+//                navController = navController,
+//            )
+//            BottomSection(
+//                moodsImage = moodImageList.take(5),
+//                moodsForm = moodFormList.take(5),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(remainingHeight)
+//                    .align(Alignment.BottomCenter)
+//                    .clip(
+//                        RoundedCornerShape(
+//                            24.dp,
+//                            24.dp,
+//                            0.dp,
+//                            0.dp
+//                        )
+//                    ),
+//            )
+//
+//            val centerHeight = 56.dp
+//            val centerBottomPadding = remainingHeight - centerHeight / 2
+//
+//            MenuSection(modifier = Modifier
+//                .padding(
+//                    bottom = centerBottomPadding,
+//                    start = 32.dp,
+//                    end = 32.dp
+//                )
+//                .fillMaxWidth()
+//                .height(centerHeight)
+//                .align(Alignment.BottomCenter)
+//                .clickable {
+//                    navController.navigate("${Screen.ApplicationContent.Camera.route}/no-uuid") {
+//                        popUpTo(navController.graph.findStartDestination().id) {
+//                            saveState = true
+//                        }
+//                        restoreState = true
+//                        launchSingleTop = true
+//                    }
+//                })
+//        }
+//    }
 }
 
 @Composable
@@ -221,7 +260,6 @@ fun BottomSection(
         Spacer(modifier = Modifier.height(32.dp))
         ArticleSection()
         Spacer(modifier = Modifier.height(32.dp))
-        ArticleSection()
     }
 }
 
