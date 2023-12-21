@@ -1,72 +1,72 @@
 [
   {
     "id": 1,
-    "name": "Dr. Smith",
+    "name": "Dr. Budi Santoso",
     "specialization": "Clinical Psychologist",
-    "tariff": "IDR 2,250,000",
-    "description": "Dr. Smith is a highly experienced clinical psychologist with a focus on evidence-based therapies to help individuals cope with various mental health issues."
+    "tariff": "50000",
+    "description": "Dr. Budi Santoso is a highly experienced clinical psychologist with a focus on evidence-based therapies to help individuals cope with various mental health issues."
   },
   {
     "id": 2,
-    "name": "Dr. Johnson",
+    "name": "Dr. Joko Raharjo",
     "specialization": "Counseling Psychologist",
-    "tariff": "IDR 1,800,000",
-    "description": "Dr. Johnson specializes in counseling psychology, providing support and guidance to individuals facing challenges in their personal and professional lives."
+    "tariff": "50000",
+    "description": "Dr. Joko Raharjo specializes in counseling psychology, providing support and guidance to individuals facing challenges in their personal and professional lives."
   },
   {
     "id": 3,
-    "name": "Dr. Davis",
+    "name": "Dr. Ani Kusuma",
     "specialization": "Child Psychologist",
-    "tariff": "IDR 2,700,000",
-    "description": "Dr. Davis is a child psychologist dedicated to helping children and their families navigate through developmental and behavioral issues with a compassionate and child-friendly approach."
+    "tariff": "50000",
+    "description": "Dr. Ani Kusuma is a child psychologist dedicated to helping children and their families navigate through developmental and behavioral issues with a compassionate and child-friendly approach."
   },
   {
     "id": 4,
-    "name": "Dr. Garcia",
+    "name": "Dr. Adi Nugroho",
     "specialization": "Sports Psychologist",
-    "tariff": "IDR 3,000,000",
-    "description": "Dr. Garcia specializes in sports psychology, assisting athletes in enhancing their mental resilience, focus, and overall performance for success in their respective sports."
+    "tariff": "50000",
+    "description": "Dr. Adi Nugroho specializes in sports psychology, assisting athletes in enhancing their mental resilience, focus, and overall performance for success in their respective sports."
   },
   {
     "id": 5,
-    "name": "Dr. White",
+    "name": "Dr. Dian Sari",
     "specialization": "Forensic Psychologist",
-    "tariff": "IDR 2,550,000",
-    "description": "Dr. White, a forensic psychologist, applies psychological principles to legal and criminal matters, providing expert analysis and testimony in court cases."
+    "tariff": "50000",
+    "description": "Dr. Dian Sari, a forensic psychologist, applies psychological principles to legal and criminal matters, providing expert analysis and testimony in court cases."
   },
   {
     "id": 6,
-    "name": "Dr. Martinez",
+    "name": "Dr. Mega Wijaya",
     "specialization": "Educational Psychologist",
-    "tariff": "IDR 2,400,000",
-    "description": "Dr. Martinez focuses on educational psychology, working with students, teachers, and educational institutions to enhance learning environments and support academic success."
+    "tariff": "50000",
+    "description": "Dr. Mega Wijaya focuses on educational psychology, working with students, teachers, and educational institutions to enhance learning environments and support academic success."
   },
   {
     "id": 7,
-    "name": "Dr. Brown",
+    "name": "Dr. Candra Putra",
     "specialization": "Health Psychologist",
-    "tariff": "IDR 2,850,000",
-    "description": "Dr. Brown specializes in health psychology, promoting holistic well-being and addressing the psychological aspects of physical health conditions."
+    "tariff": "50000",
+    "description": "Dr. Candra Putra specializes in health psychology, promoting holistic well-being and addressing the psychological aspects of physical health conditions."
   },
   {
     "id": 8,
-    "name": "Dr. Taylor",
+    "name": "Dr. Tri Wijaya",
     "specialization": "Geriatric Psychologist",
-    "tariff": "IDR 2,625,000",
-    "description": "Dr. Taylor is a geriatric psychologist, providing support and mental health services tailored to the unique needs of older adults."
+    "tariff": "50000",
+    "description": "Dr. Tri Wijaya is a geriatric psychologist, providing support and mental health services tailored to the unique needs of older adults."
   },
   {
     "id": 9,
-    "name": "Dr. Adams",
+    "name": "Dr. Anugerah Sari",
     "specialization": "Industrial-Organizational Psychologist",
-    "tariff": "IDR 3,150,000",
-    "description": "Dr. Adams specializes in industrial-organizational psychology, applying psychological principles to enhance workplace dynamics, employee well-being, and organizational effectiveness."
+    "tariff": "50000",
+    "description": "Dr. Anugerah Sari specializes in industrial-organizational psychology, applying psychological principles to enhance workplace dynamics, employee well-being, and organizational effectiveness."
   },
   {
     "id": 10,
-    "name": "Dr. Walker",
+    "name": "Dr. Wijaya Putra",
     "specialization": "Neuropsychologist",
-    "tariff": "IDR 3,300,000",
-    "description": "Dr. Walker is a neuropsychologist, specializing in the study of brain-behavior relationships and providing assessments and interventions for individuals with neurological conditions."
+    "tariff": "50000",
+    "description": "Dr. Wijaya Putra is a neuropsychologist, specializing in the study of brain-behavior relationships and providing assessments and interventions for individuals with neurological conditions."
   }
 ]

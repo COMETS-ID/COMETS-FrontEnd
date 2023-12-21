@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Comets</string>
+    <string name="home_greeting">Hello,</string>
+    <string name="home_check_your_mood">Check your mood now</string>
+    <string name="home_today_mood_score">Today\'s Mood Score</string>
+    <string name="home_today_mood">Today\'s Mood</string>
+    <string name="home_recent_moods">Recent moods</string>
+    <string name="journal_mood_charts">Mood Score Charts</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="error_email_is_not_valid">Email is not valid</string>
+    <string name="password">Password</string>
+    <string name="login_already_have_account">Already have an account? Signup now</string>
+    <string name="confirm">Confirm</string>
+    <string name="error">Error</string>
+    <string name="onboarding_track_your_mood_now">Track Your Mood Now</string>
+    <string name="signup">Signup</string>
+    <string name="logout">Logout</string>
+    <string name="psychologist_payment_detail">Payment Detail</string>
+    <string name="psychologist_total">Total</string>
+    <string name="psychologist_payment_method">Payment Method</string>
+    <string name="questionnaire_disclaimer">Disclaimer</string>
+    <string name="questionnaire_disclaimer_text">This self-filled questionnaire is for general information only. Your responses may not accurately reflect your mental health status. It is not a substitute for professional advice.</string>
+    <string name="questionnaire_submit">Submit</string>
+    <string name="username">Username</string>
+    <string name="signup_confirm_password">Confirm Password</string>
+    <string name="signup_already_have_an_account">Already have an account? Login here</string>
 </resources>
