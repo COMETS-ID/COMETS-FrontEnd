@@ -23,7 +23,7 @@ To use Comets in your project, follow these steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/Comets.git
+   https://github.com/COMETS-ID/COMETS-FrontEnd.git
    
 2. Open the project in Android Studio
 3. Build and run using emulator or physical Android device
