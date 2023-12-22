@@ -104,7 +104,7 @@ fun PsychologistItem(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = psychologist.specialization ?: "",
+                        text = psychologist.specialization,
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -123,19 +123,17 @@ fun PsychologistItem(
                         .size(64.dp)
                 )
             }
-            Text(
-                text = NumberFormat
-                    .getCurrencyInstance(Locale.getDefault())
-                    .apply {
-                        currency = Currency.getInstance("IDR")
-                    }
-                    .format(psychologist.tariff.toFloat())
-                    .toString(),
+            Text(text = NumberFormat
+                .getCurrencyInstance(Locale.getDefault())
+                .apply {
+                    currency = Currency.getInstance("IDR")
+                }
+                .format(psychologist.tariff.toFloat())
+                .toString(),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-            )
+                    .padding(16.dp))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.comets.comets.ui.screen.connect
 
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -97,7 +98,9 @@ fun ConnectScreen(
             }
             composable(Screen.ApplicationContent.Connect.PaymentDetail.route) {
                 showChips = false
-                PaymentDetailScreen()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    PaymentDetailScreen()
+                }
             }
             composable(Screen.ApplicationContent.Connect.CommunityForum.route) {
                 showChips = true
@@ -127,9 +130,10 @@ fun ConnectScreen(
                     navController = navController
                 )
             }
-            composable("${
-                Screen.ApplicationContent.Connect.ClassroomDetail.route
-            }/{userRoomUuid}/{uuid}/{roleRoom}",
+            composable(
+                "${
+                    Screen.ApplicationContent.Connect.ClassroomDetail.route
+                }/{userRoomUuid}/{uuid}/{roleRoom}",
                 arguments = listOf(navArgument("userRoomUuid") {
                     type = NavType.StringType
                 },
@@ -138,7 +142,8 @@ fun ConnectScreen(
                     },
                     navArgument("roleRoom") {
                         type = NavType.StringType
-                    })) {
+                    })
+            ) {
                 showChips = false
                 ClassroomDetailScreen(
                     userRoomUuid = it.arguments?.getString("userRoomUuid") ?: "",

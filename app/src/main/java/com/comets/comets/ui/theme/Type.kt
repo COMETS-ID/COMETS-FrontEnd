@@ -38,12 +38,12 @@ val Typography = Typography(
     ),
     displayMedium = TextStyle(
         fontFamily = AppFont.Poppins,
-        fontWeight = FontWeight.Medium, // Change to FontWeight.SemiBold if needed
+        fontWeight = FontWeight.Medium,
         fontSize = 24.sp
     ),
     displaySmall = TextStyle(
         fontFamily = AppFont.Poppins,
-        fontWeight = FontWeight.Light, // Change to FontWeight.Medium or FontWeight.SemiBold if needed
+        fontWeight = FontWeight.Light,
         fontSize = 18.sp
     ),
 
@@ -54,12 +54,12 @@ val Typography = Typography(
     ),
     headlineMedium = TextStyle(
         fontFamily = AppFont.Poppins,
-        fontWeight = FontWeight.Medium, // Change to FontWeight.SemiBold if needed
+        fontWeight = FontWeight.Medium,
         fontSize = 20.sp
     ),
     headlineSmall = TextStyle(
         fontFamily = AppFont.Poppins,
-        fontWeight = FontWeight.Light, // Change to FontWeight.Medium or FontWeight.SemiBold if needed
+        fontWeight = FontWeight.Light,
         fontSize = 16.sp
     ),
 
@@ -70,12 +70,12 @@ val Typography = Typography(
     ),
     titleMedium = TextStyle(
         fontFamily = AppFont.Poppins,
-        fontWeight = FontWeight.Medium, // Change to FontWeight.SemiBold if needed
+        fontWeight = FontWeight.Medium,
         fontSize = 18.sp
     ),
     titleSmall = TextStyle(
         fontFamily = AppFont.Poppins,
-        fontWeight = FontWeight.Light, // Change to FontWeight.Medium or FontWeight.SemiBold if needed
+        fontWeight = FontWeight.Light,
         fontSize = 16.sp
     ),
 

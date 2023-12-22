@@ -119,68 +119,6 @@ fun HomeScreen(
             }
         }
     }
-//    Column {
-//        BoxWithConstraints(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(MaterialTheme.colorScheme.primary)
-//        ) {
-//            var topHeight by remember { mutableStateOf(0.dp) }
-//            val maxHeight = this.maxHeight
-//            val density = LocalDensity.current
-//            val remainingHeight = maxHeight - topHeight
-//
-//            TopSection(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .align(Alignment.TopCenter)
-//                    .onGloballyPositioned {
-//                        topHeight = with(density) {
-//                            it.size.height.toDp()
-//                        }
-//                    },
-//                navController = navController,
-//            )
-//            BottomSection(
-//                moodsImage = moodImageList.take(5),
-//                moodsForm = moodFormList.take(5),
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(remainingHeight)
-//                    .align(Alignment.BottomCenter)
-//                    .clip(
-//                        RoundedCornerShape(
-//                            24.dp,
-//                            24.dp,
-//                            0.dp,
-//                            0.dp
-//                        )
-//                    ),
-//            )
-//
-//            val centerHeight = 56.dp
-//            val centerBottomPadding = remainingHeight - centerHeight / 2
-//
-//            MenuSection(modifier = Modifier
-//                .padding(
-//                    bottom = centerBottomPadding,
-//                    start = 32.dp,
-//                    end = 32.dp
-//                )
-//                .fillMaxWidth()
-//                .height(centerHeight)
-//                .align(Alignment.BottomCenter)
-//                .clickable {
-//                    navController.navigate("${Screen.ApplicationContent.Camera.route}/no-uuid") {
-//                        popUpTo(navController.graph.findStartDestination().id) {
-//                            saveState = true
-//                        }
-//                        restoreState = true
-//                        launchSingleTop = true
-//                    }
-//                })
-//        }
-//    }
 }
 
 @Composable

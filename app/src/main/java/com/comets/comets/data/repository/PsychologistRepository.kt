@@ -1,10 +1,10 @@
 package com.comets.comets.data.repository
 
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.comets.comets.data.remote.GeneralApiService
 import com.comets.comets.data.response.PsychologistResponseItem
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import javax.inject.Inject
 
 class PsychologistRepository @Inject constructor(private val apiService: GeneralApiService) {

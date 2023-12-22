@@ -146,7 +146,8 @@ fun CometsApp(
                 composable("${Screen.ApplicationContent.Camera.route}/{uuid}",
                     arguments = listOf(navArgument("uuid") {
                         type = NavType.StringType
-                    })) {
+                    })
+                ) {
                     CameraScreen(
                         appDependencies = appDependencies,
                         navController = navController,
@@ -155,10 +156,9 @@ fun CometsApp(
                 }
                 composable(
                     "${Screen.ApplicationContent.CameraResult.route}/{uri}/{uuid}",
-                    arguments = listOf(
-                        navArgument("uri") {
-                            type = NavType.StringType
-                        },
+                    arguments = listOf(navArgument("uri") {
+                        type = NavType.StringType
+                    },
                         navArgument("uuid") {
                             type = NavType.StringType
                         })
@@ -173,10 +173,9 @@ fun CometsApp(
                     "${
                         Screen.ApplicationContent.PredictionResult.route
                     }/{prediction}/{uuid}",
-                    arguments = listOf(
-                        navArgument("prediction") {
-                            type = NavType.StringType
-                        },
+                    arguments = listOf(navArgument("prediction") {
+                        type = NavType.StringType
+                    },
                         navArgument("uuid") {
                             type = NavType.StringType
                         })
@@ -195,10 +194,9 @@ fun CometsApp(
                 }
                 composable(
                     "${Screen.ApplicationContent.Questionnaire.route}/{prediction}/{uuid}",
-                    arguments = listOf(
-                        navArgument("prediction") {
-                            type = NavType.StringType
-                        },
+                    arguments = listOf(navArgument("prediction") {
+                        type = NavType.StringType
+                    },
                         navArgument("uuid") {
                             type = NavType.StringType
                         })
@@ -209,9 +207,10 @@ fun CometsApp(
                         uuid = it.arguments?.getString("uuid") ?: ""
                     )
                 }
-                composable("${
-                    Screen.ApplicationContent.QuestionnaireResult.route
-                }/{prediction}/{score}/{uuid}",
+                composable(
+                    "${
+                        Screen.ApplicationContent.QuestionnaireResult.route
+                    }/{prediction}/{score}/{uuid}",
                     arguments = listOf(navArgument("prediction") {
                         type = NavType.StringType
                     },
@@ -220,7 +219,8 @@ fun CometsApp(
                         },
                         navArgument("uuid") {
                             type = NavType.StringType
-                        })) {
+                        })
+                ) {
                     QuestionnaireResultScreen(
                         prediction = it.arguments?.getString("prediction") ?: "",
                         score = it.arguments?.getInt("score") ?: 0,

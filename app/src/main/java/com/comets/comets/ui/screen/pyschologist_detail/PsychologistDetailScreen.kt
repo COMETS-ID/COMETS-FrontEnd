@@ -146,35 +146,31 @@ fun PsychologistDetailScreen(
                                 style = MaterialTheme.typography.labelMedium,
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            Text(
-                                text = NumberFormat
-                                    .getCurrencyInstance(Locale.getDefault())
-                                    .apply {
-                                        currency = Currency.getInstance("IDR")
-                                    }
-                                    .format(it.tariff.toFloat())
-                                    .toString(),
+                            Text(text = NumberFormat
+                                .getCurrencyInstance(Locale.getDefault())
+                                .apply {
+                                    currency = Currency.getInstance("IDR")
+                                }
+                                .format(it.tariff.toFloat())
+                                .toString(),
                                 textAlign = TextAlign.Right,
                                 style = MaterialTheme.typography.labelMedium,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                                modifier = Modifier.fillMaxWidth())
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = NumberFormat
-                                    .getCurrencyInstance(Locale.getDefault())
-                                    .apply {
-                                        currency = Currency.getInstance("IDR")
-                                    }
-                                    .format(
-                                        it.tariff.toFloat() + 20000.0
-                                    )
-                                    .toString(),
+                            Text(text = NumberFormat
+                                .getCurrencyInstance(Locale.getDefault())
+                                .apply {
+                                    currency = Currency.getInstance("IDR")
+                                }
+                                .format(
+                                    it.tariff.toFloat() + 20000.0
+                                )
+                                .toString(),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 style = MaterialTheme.typography.labelLarge,
                                 textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                                modifier = Modifier.fillMaxWidth())
                         }
                     }
                 }
@@ -222,17 +218,15 @@ fun PsychologistDetailScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Total: " + NumberFormat
-                        .getCurrencyInstance(Locale.getDefault())
-                        .apply {
-                            currency = Currency.getInstance("IDR")
-                        }
-                        .format(
-                            it.tariff.toFloat() + 20000.0
-                        )
-                        .toString()
-                )
+                Text(text = "Total: " + NumberFormat
+                    .getCurrencyInstance(Locale.getDefault())
+                    .apply {
+                        currency = Currency.getInstance("IDR")
+                    }
+                    .format(
+                        it.tariff.toFloat() + 20000.0
+                    )
+                    .toString())
                 Button(onClick = {
                     navController.navigate(Screen.ApplicationContent.Connect.PaymentDetail.route)
                 }) {

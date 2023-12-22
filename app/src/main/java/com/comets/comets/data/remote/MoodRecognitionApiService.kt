@@ -1,7 +1,7 @@
 package com.comets.comets.data.remote
 
-import com.google.gson.GsonBuilder
 import com.comets.comets.data.prefs.AuthTokenPreferences
+import com.google.gson.GsonBuilder
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
