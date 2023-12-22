@@ -15,6 +15,19 @@ Comets is an open-source project developed with Jetpack Compose, aimed at provid
 
 - **Privacy First**: Comets prioritizes user privacy, ensuring that sensitive information is securely stored and accessible only to authorized users.
 
+
+## Getting Started
+
+To use Comets in your project, follow these steps:
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/your-username/Comets.git
+   
+2. Open the project in Android Studio
+3. Build and run using emulator or physical Android device
+
 ## Tech Stack
 
 - **Jetpack Compose**: Modern Android UI toolkit for building native UIs.
